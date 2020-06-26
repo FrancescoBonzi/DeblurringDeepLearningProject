@@ -135,8 +135,8 @@ def restore_images(splitted_images):
     return restored_images
 
 
-blurred_videos_directory = "/Users/francescobonzi/Documents/Università/Magistrale/DeepLearning/Project/datasets/blurred_videos"
-original_videos_directory = "/Users/francescobonzi/Documents/Università/Magistrale/DeepLearning/Project/datasets/original_videos"
+blurred_videos_directory = "./train_blur"
+original_videos_directory = "./train_sharp"
 train_blurred_REDs = load_REDs(blurred_videos_directory)
 train_sharped_REDs = load_REDs(original_videos_directory)
 
@@ -233,8 +233,8 @@ inspect_report(report)
 
 '''PREDICTION'''
 
-test_blurred_videos_directory = "/Users/francescobonzi/Documents/Università/Magistrale/DeepLearning/Project/datasets/blurred"
-test_original_videos_directory = "/Users/francescobonzi/Documents/Università/Magistrale/DeepLearning/Project/datasets/original"
+test_blurred_videos_directory = "./test_blur"
+test_original_videos_directory = "./test_sharp"
 test_blurred_REDs = load_REDs(test_blurred_videos_directory)
 test_sharped_REDs = load_REDs(test_original_videos_directory)
 

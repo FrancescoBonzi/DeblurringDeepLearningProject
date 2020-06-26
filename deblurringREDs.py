@@ -12,6 +12,8 @@ import cv2
 from scipy.ndimage import gaussian_filter
 from skimage.measure import compare_psnr, compare_ssim, compare_mse
 
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+
 tf.keras.backend.set_floatx('float64')
 
 num_videos = 2
@@ -105,11 +107,7 @@ def load_REDs(directory):
                 path_frame = path + "/" + frame
                 if os.path.isfile(path_frame) and path_frame.endswith(".png"):
                     img = cv2.imread(path_frame)
-                    #print("num frame: ",(i-1)*frame_per_video+j-1)
-                    #print(type(img))
-                    loaded_dataset[(i-1)*frame_per_video+j-1, :, :, :] = img
-                    print(loaded_dataset[(i-1)*frame_per_video+j-1, :, :, :])
-                    #plt.show()
+                    loaded_dataset[(i-1)*frame_per_video+j-1, :, :, :] = img/255
     return loaded_dataset
 
 def split_REDs(loaded_dataset):
@@ -129,8 +127,8 @@ def split_REDs(loaded_dataset):
     return splitted_dataset
 
 
-blurred_videos_directory = "/Users/francescobonzi/Documents/Università/Magistrale/DeepLearning/Project/datasets/blurred_videos"
-original_videos_directory = "/Users/francescobonzi/Documents/Università/Magistrale/DeepLearning/Project/datasets/original_videos"
+blurred_videos_directory = "./train_blur"
+original_videos_directory = "./train_sharp"
 train_blurred_REDs = load_REDs(blurred_videos_directory)
 train_sharped_REDs = load_REDs(original_videos_directory)
 
@@ -231,13 +229,13 @@ report = model.fit(x=train_blurred_dataset,
 
 '''PREDICTION'''
 
-test_blurred_videos_directory = "/Users/francescobonzi/Documents/Università/Magistrale/DeepLearning/Project/datasets/blurred"
-test_original_videos_directory = "/Users/francescobonzi/Documents/Università/Magistrale/DeepLearning/Project/datasets/original"
+test_blurred_videos_directory = "./test_blur"
+test_original_videos_directory = "./test_sharp"
 test_blurred_REDs = load_REDs(test_blurred_videos_directory)
 test_sharped_REDs = load_REDs(test_original_videos_directory)
 
-print(test_blurred_REDs.shape)
-print(test_sharped_REDs.shape)
+print("TEST: ",test_blurred_REDs.shape)
+print("TEST: ",test_sharped_REDs.shape)
 
 test_blurred_dataset = split_REDs(test_blurred_REDs)
 #test_sharped_dataset = split_REDs(test_sharped_REDs)
@@ -253,4 +251,4 @@ for i in range(int(len(prediction)/patches)):
             restored_images[i, w*width:(w+1)*width, h*height:(h+1)*height, :] = prediction[i*patches + w*num_patches_height+h, start_height:start_height+height, start_width:start_width+width, :]
                                    
 
-print_dataset(test_sharped_REDs, test_blurred_REDs, predicted_images=prediction)
+#print_dataset(test_sharped_REDs, test_blurred_REDs, predicted_images=prediction)

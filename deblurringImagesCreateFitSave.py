@@ -30,8 +30,8 @@ class DeblurringImagesModel(tf.keras.Model):
     self.deconv1 = Conv2DTranspose(128, 3, activation='relu')
     self.deconv2 = Conv2DTranspose(64, 3, activation='relu')
     self.deconv3 = Conv2DTranspose(32, 3, activation='relu')
-    self.output_layer = Conv2DTranspose(3, 3, activation='relu', padding='same'
-
+    self.output_layer = Conv2DTranspose(3, 3, activation='relu', padding='same')
+  
   def call(self, x):
     x = self.conv1(x)
     x = self.conv2(x)
@@ -170,7 +170,7 @@ train_images=train_images.reshape(len(train_images),32,32,3)
 model.compile(loss=SSIMLoss, optimizer=tf.keras.optimizers.Adam(), metrics=['mse', 'mae', PSNR])
 report = model.fit(x=train_blurred_images, 
                    y=train_images, 
-                   batch_size=512, 
+                   batch_size=32, 
                    epochs=EPOCHS, 
                    callbacks=[early_stop], 
                    validation_split=0.25)
