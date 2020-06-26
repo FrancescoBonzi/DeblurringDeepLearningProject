@@ -85,26 +85,34 @@ def inspect_report(report):
     psnr = report.history['PSNR']
     val_psnr = report.history['val_PSNR']
 
-    epochs = range(len(mae)) # Get number of epochs
+    epochs = range(1, len(mae)+1) # Get number of epochs
+    xlabel = 'epochs'
     
     """ Plot training and validation accuracies per epoch """
-    
-    plt.plot  ( epochs,     mae )
-    plt.plot  ( epochs, val_mae )
+    plt.plot  ( epochs,     mae, label = 'mae' )
+    plt.plot  ( epochs, val_mae, label = 'val_mae' )
     plt.title ('Training and validation mae')
+    plt.xlabel(xlabel)
+    plt.legend()
     plt.show()
 
-    plt.plot  ( epochs,     mse )
-    plt.plot  ( epochs, val_mse )
+    plt.plot  ( epochs,     mse, label = 'mse' )
+    plt.plot  ( epochs, val_mse, label = 'val_mse' )
     plt.title ('Training and validation mse')
+    plt.xlabel(xlabel)
+    plt.legend()
     plt.show()
 
-    plt.plot  ( epochs,     loss )
-    plt.plot  ( epochs, val_loss )
+    plt.plot  ( epochs,     loss, label = 'loss' )
+    plt.plot  ( epochs, val_loss, label = 'val_loss' )
     plt.title ('Training and validation SSIM')
+    plt.xlabel(xlabel)
+    plt.legend()
     plt.show()
 
-    plt.plot  ( epochs,     psnr )
-    plt.plot  ( epochs, val_psnr )
+    plt.plot  ( epochs,     psnr, label = 'PSNR' )
+    plt.plot  ( epochs, val_psnr, label = 'val_PSNR' )
     plt.title ('Training and validation PSNR')
+    plt.xlabel(xlabel)
+    plt.legend()
     plt.show()
