@@ -14,26 +14,26 @@ from scipy.ndimage import gaussian_filter
 ### UTILITIES FOR DATASET PROCESSING ###
 ########################################
 
-def print_dataset(images, blurred_images, sigma, predicted_images = [], num = 10):
+def print_dataset(images, blurred_images, sigma, predicted_images=[], num=10):
     num_plots_per_image = 2
     if len(predicted_images) != 0:
         num_plots_per_image = 3
-    plt.figure(figsize=(4*num_plots_per_image,4*num))
+    plt.figure(figsize=(4*num_plots_per_image, 4*num))
     for i in range(num):
-        plt.subplot(num,num_plots_per_image,i*num_plots_per_image+1)
+        plt.subplot(num, num_plots_per_image, i*num_plots_per_image+1)
         plt.xticks([])
         plt.yticks([])
         plt.grid(False)
         plt.imshow(images[i])
         plt.xlabel("Original")
-        plt.subplot(num,num_plots_per_image,i*num_plots_per_image+2)
+        plt.subplot(num, num_plots_per_image, i*num_plots_per_image+2)
         plt.xticks([])
         plt.yticks([])
         plt.grid(False)
         plt.imshow(blurred_images[i])
         plt.xlabel("Blurred with sigma={:.2f}".format(sigma[i]))
         if len(predicted_images) != 0:
-            plt.subplot(num,num_plots_per_image,i*num_plots_per_image+3)
+            plt.subplot(num, num_plots_per_image, i*num_plots_per_image+3)
             plt.xticks([])
             plt.yticks([])
             plt.grid(False)
@@ -41,12 +41,15 @@ def print_dataset(images, blurred_images, sigma, predicted_images = [], num = 10
             plt.xlabel("Predicted")
     plt.show()
 
+
 ''' Construction of blurred images with a gaussian filter of random deviation. For CIFAR10 Dataset '''
+
+
 def build_dataset(images):
     blurred_images = []
     rands = []
     for i in range(images.shape[0]):
-        rand = random.uniform(0,3)
+        rand = random.uniform(0, 3)
         rands.append(rand)
         img_gauss = gaussian_filter(images[i], rand)
         blurred_images.append(img_gauss)
@@ -61,9 +64,10 @@ def build_dataset(images):
 def SSIMLoss(y_true, y_pred):
     return 1 - tf.reduce_mean(tf.image.ssim(y_true, y_pred, 1.0))
 
+
 def PSNR(y_true, y_pred):
     mse = tf.keras.losses.MeanSquaredError()(y_true, y_pred)
-    log10 = 2.303 # it is equivalent to ln(10)
+    log10 = 2.303  # it is equivalent to ln(10)
     return 10 * tf.keras.backend.log(255 * 255 / mse) / log10
 
 
@@ -71,51 +75,29 @@ def PSNR(y_true, y_pred):
 ### REPORT OF ACCURACY FUNCTIONS ###
 ####################################
 
-def inspect_report(report):
-    
+def extract_from_report(report, metrics):
+    list = []
+    for i in range(len(metrics)):
+        list.append(report.history[metrics[i]])
+        list.append(report.history['val_' + metrics[i]])
+    return list
+
+
+def inspect_report(report, metrics):
     """ Retrieve a list of list results on training and test data
         sets for each training epoch """
 
-    mae = report.history['mae']
-    val_mae = report.history['val_mae']
-    mse = report.history['mse']
-    val_mse = report.history['val_mse']
-    loss = report.history['loss']
-    val_loss = report.history['val_loss']
-    psnr = report.history['PSNR']
-    val_psnr = report.history['val_PSNR']
-
-    epochs = range(1, len(mae)+1) # Get number of epochs
+    epochs = range(1, len(report[0])+1)  # Get number of epochs
     xlabel = 'epochs'
-    
-    """ Plot training and validation accuracies per epoch """
-    plt.plot  ( epochs,     mae, label = 'mae' )
-    plt.plot  ( epochs, val_mae, label = 'val_mae' )
-    plt.title ('Training and validation mae')
-    plt.xlabel(xlabel)
-    plt.legend()
-    plt.show()
 
-    plt.plot  ( epochs,     mse, label = 'mse' )
-    plt.plot  ( epochs, val_mse, label = 'val_mse' )
-    plt.title ('Training and validation mse')
-    plt.xlabel(xlabel)
-    plt.legend()
-    plt.show()
-
-    plt.plot  ( epochs,     loss, label = 'loss' )
-    plt.plot  ( epochs, val_loss, label = 'val_loss' )
-    plt.title ('Training and validation SSIM')
-    plt.xlabel(xlabel)
-    plt.legend()
-    plt.show()
-
-    plt.plot  ( epochs,     psnr, label = 'PSNR' )
-    plt.plot  ( epochs, val_psnr, label = 'val_PSNR' )
-    plt.title ('Training and validation PSNR')
-    plt.xlabel(xlabel)
-    plt.legend()
-    plt.show()
+    for i in range(len(metrics)):
+        label = metrics[i]
+        plt.plot(epochs, report[i], label=label)
+        plt.plot(epochs, report[i+1], label='val_' + label)
+        plt.title('Training and validation ' + label)
+        plt.xlabel(xlabel)
+        plt.legend()
+        plt.show()
 
 
 ##############################
@@ -123,6 +105,8 @@ def inspect_report(report):
 ##############################
 
 ''' From KERAS documentation '''
+
+
 def resnet_layer(inputs,
                  num_filters=16,
                  kernel_size=3,

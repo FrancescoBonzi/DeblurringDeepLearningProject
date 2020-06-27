@@ -23,11 +23,9 @@ class DeblurringImagesModel(tf.keras.Model):
         self.conv1 = Conv2D(32, 3, activation='relu', input_shape=input_shape)
         self.conv2 = Conv2D(64, 3, activation='relu')
         self.conv3 = Conv2D(128, 3, activation='relu')
-        self.conv4 = Conv2D(128, 3, activation='relu')
         self.deconv1 = Conv2DTranspose(128, 3, activation='relu')
         self.deconv2 = Conv2DTranspose(64, 3, activation='relu')
         self.deconv3 = Conv2DTranspose(32, 3, activation='relu')
-        self.deconv4 = Conv2DTranspose(3, 3, activation='relu')
         self.output_layer = Conv2DTranspose(3, 3, activation='relu', padding='same')
 
     def call(self, input_img):
