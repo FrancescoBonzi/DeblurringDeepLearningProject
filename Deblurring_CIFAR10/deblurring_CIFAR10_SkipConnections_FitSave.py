@@ -13,7 +13,7 @@ tf.keras.backend.set_floatx('float64')
 width = 32
 height = 32
 metrics = ['loss', 'mae', 'mse', 'PSNR']
-EPOCHS = 35
+EPOCHS = 2
 
 
 #########################################################

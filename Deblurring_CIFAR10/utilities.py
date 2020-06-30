@@ -117,3 +117,59 @@ class ResnetLayer(tf.keras.layers.Layer):
         y = self.conv2(y)
         output = tf.keras.activations.relu(x + y)
         return output
+
+
+
+""" 
+#################################
+############## REDS #############
+#################################
+"""
+
+def count_frame_per_video(directory):
+    videos = sorted(os.listdir(directory))
+    path = directory + "/" + enumerate(videos)[1]
+    return len(os.listdir(directory))
+
+
+def get_left_overlap(k, num_patches):
+    if k == 0:
+        left_overlap_factor = 0
+    elif k == num_patches-1:
+        left_overlap_factor = 2*num_conv
+    else:
+        left_overlap_factor = num_conv
+    return left_overlap_factor
+
+
+def load_REDs(directory):
+    loaded_dataset = np.zeros(
+        (num_videos*frame_per_video, original_height, original_width, 3))
+    videos = sorted(os.listdir(directory))
+    for i, dir in enumerate(videos):
+        path = directory + "/" + dir
+        if os.path.isdir(path):
+            frames = sorted(os.listdir(path))
+            print("loading ", path, "...")
+            for j, frame in enumerate(frames):
+                path_frame = path + "/" + frame
+                if os.path.isfile(path_frame) and path_frame.endswith(".png"):
+                    img = cv2.imread(path_frame)
+                    loaded_dataset[(i-1)*frame_per_video+j-1, :, :, :] = img/255
+    return loaded_dataset
+
+def split_REDs(loaded_dataset):
+    splitted_dataset = np.zeros(
+        (num_videos*frame_per_video*patches, height+2*num_conv, width+2*num_conv, 3))
+    for i in range(int(num_videos*frame_per_video/patches)):
+        for w in range(num_patches_width):
+            left_overlap_factor_width = get_left_overlap(
+                w, num_patches_width)
+            start_width = w*width-left_overlap_factor_width
+            for h in range(num_patches_height):
+                left_overlap_factor_height = get_left_overlap(
+                    h, num_patches_height)
+                start_heigth = h*height-left_overlap_factor_height
+                splitted_dataset[i*patches+w*num_patches_height+h, :, :, :] = loaded_dataset[i, start_heigth:(
+                    start_heigth+height+2*num_conv), start_width:(start_width+width+2*num_conv), ]
+    return splitted_dataset
