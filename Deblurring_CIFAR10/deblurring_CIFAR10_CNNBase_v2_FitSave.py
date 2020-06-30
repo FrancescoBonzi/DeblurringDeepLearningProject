@@ -13,7 +13,7 @@ tf.keras.backend.set_floatx('float64')
 width = 32
 height = 32
 metrics = ['loss', 'mae', 'mse', 'PSNR']
-EPOCHS = 35
+EPOCHS = 2
 
 #########################################################
 ### LOADING DATASET AND GENERATION OF BLURRING IMAGES ###
@@ -23,7 +23,7 @@ EPOCHS = 35
 
 ''' Normalize pixel values to be between 0 and 1 '''
 train_images = train_images / 255.0
-#train_images = train_images[1:100,:,:,:]
+train_images = train_images[1:100,:,:,:]
 
 train_blurred_images, train_rands = build_dataset(train_images)
 

@@ -13,7 +13,7 @@ tf.keras.backend.set_floatx('float64')
 width = 32
 height = 32
 EPOCHS = 35
-model_folder = "ResNet"
+model_folder = "SkipConnections"
 metrics = ['loss', 'mae', 'mse', 'PSNR']
 test_lower_bound = 10
 test_upper_bound = 20
