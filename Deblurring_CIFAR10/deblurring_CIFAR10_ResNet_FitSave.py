@@ -23,7 +23,7 @@ EPOCHS = 35
 (train_images, _), (_, _) = datasets.cifar10.load_data()
 ''' Normalize pixel values to be between 0 and 1 '''
 train_images = train_images / 255.0
-train_images = train_images[1:1000,:,:,:]
+#train_images = train_images[1:1000,:,:,:]
 
 train_blurred_images, train_rands = build_dataset(train_images)
 
