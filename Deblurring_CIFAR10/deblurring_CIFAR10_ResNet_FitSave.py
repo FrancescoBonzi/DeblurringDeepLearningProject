@@ -5,6 +5,7 @@ from tensorflow.keras.layers import Conv2D, Conv2DTranspose
 import numpy as np
 import os
 import dill
+import time
 
 from utilities import SSIMLoss, PSNR, build_dataset, print_dataset, extract_from_report
 from autoencoder_models import DeblurringResnet
@@ -44,12 +45,15 @@ model.summary()
 early_stop = tf.keras.callbacks.EarlyStopping(monitor='loss', min_delta=0.0001, patience=3)
 
 model.compile(loss=SSIMLoss, optimizer=tf.keras.optimizers.Adam(), metrics=['mse', 'mae', PSNR])
+start = time.time()
 report = model.fit(x=train_blurred_images, 
                    y=train_images, 
                    batch_size=32, 
                    epochs=EPOCHS, 
                    callbacks=[early_stop], 
                    validation_split=0.25)
+end = time.time()
+print("Time: ", end - start, "s")
 
 
 #################################
