@@ -4,12 +4,16 @@ from tensorflow.keras.layers import Conv2D, Conv2DTranspose
 
 import numpy as np
 import os
+import dill
 
-from utilities import SSIMLoss, PSNR, build_dataset, print_dataset, inspect_report, ResnetLayer
+from utilities import SSIMLoss, PSNR, build_dataset, print_dataset, extract_from_report
+from autoencoder_models import DeblurringResnet
 
 tf.keras.backend.set_floatx('float64')
 width = 32
 height = 32
+metrics = ['loss', 'mae', 'mse', 'PSNR']
+EPOCHS = 35
 
 
 #########################################################
@@ -28,15 +32,13 @@ train_blurred_images, train_rands = build_dataset(train_images)
 #### DEFINITION OF THE CONVOLUTIONAL NEURAL NETWORK ###
 #######################################################
 
-model = DeblurringImagesModel()
+model = DeblurringResnet()
 model.build(input_shape=(len(train_images),height, width,3))
 model.summary()
 
 ########################################
 #### COMPILING AND FITTING THE MODEL ###
 ########################################
-
-EPOCHS = 2
 
 # The patience parameter is the amount of epochs to check for improvement
 early_stop = tf.keras.callbacks.EarlyStopping(monitor='loss', min_delta=0.0001, patience=3)
@@ -50,5 +52,14 @@ report = model.fit(x=train_blurred_images,
                    validation_split=0.25)
 
 
-inspect_report(report, ['loss', 'mae', 'mse', 'PSNR'])
+#################################
+#### SAVING REPORTS AND MODEL ###
+#################################
+
+
+filename = "./reports/ResNet/" + "epochs" + str(EPOCHS) + ".obj"
+filehandler = open(filename, 'wb')
+list = extract_from_report(report, metrics)
+dill.dump(list, filehandler)
+
 model.save("./models/ResNet/" + "epochs" + str(EPOCHS))
