@@ -10,7 +10,7 @@ from utilities import SSIMLoss, PSNR, build_dataset, print_dataset, inspect_repo
 tf.keras.backend.set_floatx('float64')
 width = 32
 height = 32
-name_model = "SkipConnections"
+name_model = "CNN/epochs35"
 
 
 ######################################
