@@ -12,7 +12,7 @@ tf.keras.backend.set_floatx('float64')
 
 width = 32
 height = 32
-EPOCHS = 2
+EPOCHS = 35
 model_folder = "CNNBase_v2"
 metrics = ['loss', 'mae', 'mse', 'PSNR']
 test_lower_bound = 10
