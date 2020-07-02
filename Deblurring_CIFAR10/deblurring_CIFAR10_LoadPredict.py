@@ -12,9 +12,11 @@ tf.keras.backend.set_floatx('float64')
 
 width = 32
 height = 32
-EPOCHS = 35
-model_folder = "CNNBase_v2"
-metrics = ['loss', 'mae', 'mse', 'PSNR']
+EPOCHS = 2
+model_folder = "CNNBase_v1"
+loss = "PSNR"
+#metrics = ['loss', 'mae', 'mse', 'PSNR']
+metrics = ['loss', 'mae', 'mse', 'SSIMLoss']
 test_lower_bound = 10
 test_upper_bound = 20
 
@@ -22,7 +24,7 @@ test_upper_bound = 20
 ### LOAD THE MODEL AND THE DATASET ###
 ######################################
 
-model = tf.keras.models.load_model("./models/" + model_folder + "/" + "epochs" + str(EPOCHS), custom_objects={'SSIMLoss': SSIMLoss, 'PSNR': PSNR})
+model = tf.keras.models.load_model("./models/" + model_folder + "/" + "epochs" + str(EPOCHS) + "_" + loss, custom_objects={'SSIMLoss': SSIMLoss, 'PSNR': PSNR})
 (_, _), (test_images, _) = datasets.cifar10.load_data()
 test_images =  test_images / 255.0 # Normalize pixel values to be between 0 and 1
 test_images = test_images[test_lower_bound:test_upper_bound, :, :, :]
@@ -32,7 +34,7 @@ test_images = test_images[test_lower_bound:test_upper_bound, :, :, :]
 ### LOAD THE REPORT AND SHOW RESULTS ###
 ########################################
 
-filename = "./reports/" + model_folder + "/" + "epochs" + str(EPOCHS) + ".obj"
+filename = "./reports/" + model_folder + "/" + "epochs" + str(EPOCHS) + "_" + loss + ".obj"
 filehandler = open(filename, 'rb') 
 report = dill.load(filehandler)
 

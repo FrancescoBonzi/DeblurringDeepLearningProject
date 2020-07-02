@@ -5,6 +5,7 @@ from tensorflow.keras.layers import Conv2D, Conv2DTranspose
 import numpy as np
 import os
 import dill
+import time
 
 from utilities import SSIMLoss, PSNR, build_dataset, print_dataset, extract_from_report
 from autoencoder_models import DeblurringCNNBase_v1
@@ -12,7 +13,8 @@ from autoencoder_models import DeblurringCNNBase_v1
 tf.keras.backend.set_floatx('float64')
 width = 32
 height = 32
-metrics = ['loss', 'mae', 'mse', 'PSNR']
+loss = "PSNR"
+metrics = ['loss', 'mae', 'mse', 'SSIMLoss']
 EPOCHS = 35
 
 #########################################################
@@ -43,23 +45,25 @@ model.summary()
 # The patience parameter is the amount of epochs to check for improvement
 early_stop = tf.keras.callbacks.EarlyStopping(monitor='loss', min_delta=0.0001, patience=3)
 
-model.compile(loss=SSIMLoss, optimizer=tf.keras.optimizers.Adam(), metrics=['mse', 'mae', PSNR])
+model.compile(loss=PSNR, optimizer=tf.keras.optimizers.Adam(), metrics=['mse', 'mae', SSIMLoss])
+start = time.time()
 report = model.fit(x=train_blurred_images, 
                    y=train_images, 
                    batch_size=32, 
                    epochs=EPOCHS, 
                    callbacks=[early_stop], 
                    validation_split=0.25)
-
+end = time.time()
+print(end - start)
 
 #################################
 #### SAVING REPORTS AND MODEL ###
 #################################
 
 
-filename = "./reports/CNNBase_v1/" + "epochs" + str(EPOCHS) + ".obj"
+filename = "./reports/CNNBase_v1/" + "epochs" + str(EPOCHS) + "_" + loss + ".obj"
 filehandler = open(filename, 'wb')
 list = extract_from_report(report, metrics)
 dill.dump(list, filehandler)
 
-model.save("./models/CNNBase_v1/" + "epochs" + str(EPOCHS))
+model.save("./models/CNNBase_v1/" + "epochs" + str(EPOCHS) + "_" + loss)
