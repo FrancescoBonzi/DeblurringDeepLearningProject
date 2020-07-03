@@ -26,14 +26,14 @@ def PSNR(y_true, y_pred):
 ###################################
 
 encode_loss = {
-        'SSIM': SSIM,
+        'SSIMLoss': SSIM,
         'mae': 'mae',
         'mse': 'mse',
         'PSNR': PSNR
     }
 
 def get_metrics(loss):
-    base_metrics = ['SSIM', 'mae', 'mse', 'PSNR']
+    base_metrics = ['SSIMLoss', 'mae', 'mse', 'PSNR']
     metrics = ['loss']
     for i in range(len(base_metrics)):
         if base_metrics[i] != loss:

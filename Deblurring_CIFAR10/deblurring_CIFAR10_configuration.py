@@ -3,9 +3,9 @@ from utilities import get_metrics, get_other_metrics, get_model, get_loss, SSIM,
 tf.keras.backend.set_floatx('float64')
 
 demo = True
-model_name = 'CNNBase_v1'
-loss_name = 'SSIM' # mse, mae, SSIM, PSNR
-EPOCHS = 1
+model_name = 'SkipConnections'
+loss_name = 'SSIMLoss' # mse, mae, SSIMLoss, PSNR
+EPOCHS = 35
 
 metrics = get_metrics(loss_name)
 other_metrics = get_other_metrics(metrics)
