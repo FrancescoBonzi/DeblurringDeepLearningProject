@@ -130,7 +130,41 @@ class DeblurringSkipConnections(tf.keras.Model):
         return output_img
 
 
-class DeblurringResnet(tf.keras.Model):
+class DeblurringResnet_v1(tf.keras.Model):
+    def __init__(self):
+        super(DeblurringResnet, self).__init__()
+        self.conv1 = Conv2D(32, 5, strides=2, activation='relu')
+        self.resnet1 = ResnetLayer(num_filters=32, kernel_size=5)
+        self.conv2 = Conv2D(64, 5, strides=2, activation='relu')
+        self.resnet2 = ResnetLayer(num_filters=64, kernel_size=5)
+        self.conv3 = Conv2D(128, 3, strides=2, activation='relu')
+        self.resnet3 = ResnetLayer(num_filters=128, kernel_size=3)
+
+        self.deconv1 = Conv2DTranspose(128, 3, strides=2, activation='relu')
+        self.resnet4 = ResnetLayer(num_filters=128, kernel_size=5)
+        self.deconv2 = Conv2DTranspose(64, 5, strides=2, activation='relu')
+        self.resnet5 = ResnetLayer(num_filters=64, kernel_size=5)
+        self.deconv3 = Conv2DTranspose(32, 8, strides=2, activation='relu')
+        self.output_layer = Conv2DTranspose(
+            3, 3, activation='relu', padding='same')
+
+    def call(self, x):
+        x = self.conv1(x)
+        x = self.resnet1(x)
+        x = self.conv2(x)
+        x = self.resnet2(x)
+        x = self.conv3(x)
+        x = self.resnet3(x)
+        x = self.deconv1(x)
+        x = self.resnet4(x)
+        x = self.deconv2(x)
+        x = self.resnet5(x)
+        x = self.deconv3(x)
+        output = self.output_layer(x)
+        return output
+
+
+class DeblurringResnet_v2(tf.keras.Model):
     def __init__(self):
         super(DeblurringResnet, self).__init__()
         self.conv1 = Conv2D(8, 5, strides=2, activation='relu')
