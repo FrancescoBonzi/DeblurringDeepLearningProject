@@ -1,8 +1,28 @@
 
 import tensorflow as tf
 from tensorflow.keras.layers import Conv2D, Conv2DTranspose
-from utilities import ResnetLayer
 
+
+##############################
+### RESIDUAL NETWORK LAYER ###
+##############################
+
+
+class ResnetLayer(tf.keras.layers.Layer):
+    def __init__(self,
+                 num_filters=16,
+                 kernel_size=3):
+        super(ResnetLayer, self).__init__()
+        self.conv1 = Conv2D(num_filters, kernel_size, activation='relu', padding='same')
+        self.conv2 = Conv2D(num_filters, kernel_size, padding='same')
+
+    def call(self, x):
+        y = self.conv1(x)
+        y = self.conv2(y)
+        output = tf.keras.activations.relu(x + y)
+        return output
+
+        
 ########################################
 ### DEFINITION OF THE NEURAL NETWORK ###
 ########################################
@@ -128,11 +148,11 @@ class DeblurringSkipConnections(tf.keras.Model):
         d4 = self.deconv4(d3)
         output_img = d4 + input_img
         return output_img
-
+        
 
 class DeblurringResnet_v1(tf.keras.Model):
     def __init__(self):
-        super(DeblurringResnet, self).__init__()
+        super(DeblurringResnet_v1, self).__init__()
         self.conv1 = Conv2D(32, 5, strides=2, activation='relu')
         self.resnet1 = ResnetLayer(num_filters=32, kernel_size=5)
         self.conv2 = Conv2D(64, 5, strides=2, activation='relu')
@@ -166,7 +186,7 @@ class DeblurringResnet_v1(tf.keras.Model):
 
 class DeblurringResnet_v2(tf.keras.Model):
     def __init__(self):
-        super(DeblurringResnet, self).__init__()
+        super(DeblurringResnet_v2, self).__init__()
         self.conv1 = Conv2D(8, 5, strides=2, activation='relu')
         self.resnet1 = ResnetLayer(num_filters=8, kernel_size=5)
         self.resnet2 = ResnetLayer(num_filters=8, kernel_size=5)

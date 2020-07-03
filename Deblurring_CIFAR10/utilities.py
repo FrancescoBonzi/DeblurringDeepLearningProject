@@ -1,14 +1,68 @@
 import tensorflow as tf
-from tensorflow.keras import datasets
-from tensorflow.keras.layers import Conv2D, Conv2DTranspose
+from autoencoder_models import *
 
 import matplotlib.pyplot as plt
 import numpy as np
 import random
 
 from scipy.ndimage import gaussian_filter
-#from skimage.measure import compare_psnr, compare_ssim, compare_mse
 
+########################################
+### DEFINITION OF SOME LOSS FUNCTIONS ###
+########################################
+
+def SSIM(y_true, y_pred):
+    return 1 - tf.reduce_mean(tf.image.ssim(y_true, y_pred, 1.0))
+
+
+def PSNR(y_true, y_pred):
+    mse = tf.keras.losses.MeanSquaredError()(y_true, y_pred)
+    log10 = 2.303  # it is equivalent to ln(10)
+    return 10 * tf.keras.backend.log(255 * 255 / mse) / log10
+
+
+###################################
+### UTILITIES FOR CONFIGURATION ###
+###################################
+
+encode_loss = {
+        'SSIM': SSIM,
+        'mae': 'mae',
+        'mse': 'mse',
+        'PSNR': PSNR
+    }
+
+def get_metrics(loss):
+    base_metrics = ['SSIM', 'mae', 'mse', 'PSNR']
+    metrics = ['loss']
+    for i in range(len(base_metrics)):
+        if base_metrics[i] != loss:
+            metrics.append(base_metrics[i])
+    print('Metrics: ', metrics)
+    return metrics
+
+def get_other_metrics(metrics):
+    other_metrics = []
+    for m in metrics:
+        if m != 'loss':
+            other_metrics.append(encode_loss[m])
+    print('Other Metrics: ', other_metrics)
+    return other_metrics
+
+def get_model(model_name):
+    encode = {
+        'CNNBase_v1': DeblurringCNNBase_v1(),
+        'CNNBase_v2': DeblurringCNNBase_v2(),
+        'ResNet_v1': DeblurringResnet_v1(),
+        'ResNet_v2': DeblurringResnet_v2(),
+        'SkipConnections': DeblurringSkipConnections()
+    }
+    model = encode[model_name]
+    print(model)
+    return model
+    
+def get_loss(loss_name):
+    return encode_loss[loss_name]
 
 ########################################
 ### UTILITIES FOR DATASET PROCESSING ###
@@ -57,20 +111,6 @@ def build_dataset(images):
     return blurred_images, rands
 
 
-########################################
-### DEFINITION OF SOME LOSS FUNCTIONS ###
-########################################
-
-def SSIMLoss(y_true, y_pred):
-    return 1 - tf.reduce_mean(tf.image.ssim(y_true, y_pred, 1.0))
-
-
-def PSNR(y_true, y_pred):
-    mse = tf.keras.losses.MeanSquaredError()(y_true, y_pred)
-    log10 = 2.303  # it is equivalent to ln(10)
-    return 10 * tf.keras.backend.log(255 * 255 / mse) / log10
-
-
 ####################################
 ### REPORT OF ACCURACY FUNCTIONS ###
 ####################################
@@ -98,25 +138,6 @@ def inspect_report(report, metrics):
         plt.xlabel(xlabel)
         plt.legend()
         plt.show()
-
-
-##############################
-### RESIDUAL NETWORK LAYER ###
-##############################
-
-class ResnetLayer(tf.keras.layers.Layer):
-    def __init__(self,
-                 num_filters=16,
-                 kernel_size=3):
-        super(ResnetLayer, self).__init__()
-        self.conv1 = Conv2D(num_filters, kernel_size, activation='relu', padding='same')
-        self.conv2 = Conv2D(num_filters, kernel_size, padding='same')
-
-    def call(self, x):
-        y = self.conv1(x)
-        y = self.conv2(y)
-        output = tf.keras.activations.relu(x + y)
-        return output
 
 
 
