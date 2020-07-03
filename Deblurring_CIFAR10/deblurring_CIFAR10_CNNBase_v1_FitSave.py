@@ -13,8 +13,8 @@ from autoencoder_models import DeblurringCNNBase_v1
 tf.keras.backend.set_floatx('float64')
 width = 32
 height = 32
-loss = "PSNR"
-metrics = ['loss', 'mae', 'mse', 'SSIMLoss']
+loss = "mse"
+metrics = ['loss', 'mae', 'PSNR', 'SSIMLoss']
 EPOCHS = 35
 
 #########################################################
@@ -45,7 +45,7 @@ model.summary()
 # The patience parameter is the amount of epochs to check for improvement
 early_stop = tf.keras.callbacks.EarlyStopping(monitor='loss', min_delta=0.0001, patience=3)
 
-model.compile(loss=PSNR, optimizer=tf.keras.optimizers.Adam(), metrics=['mse', 'mae', SSIMLoss])
+model.compile(loss='mse', optimizer=tf.keras.optimizers.Adam(), metrics=['mae', PSNR, SSIMLoss])
 start = time.time()
 report = model.fit(x=train_blurred_images, 
                    y=train_images, 
