@@ -19,6 +19,7 @@ loss = get_loss(loss_name)
 ### RESIZING ORIGINAL IMAGES SHAPE  ###
 #######################################
 
+num_conv = 3              
 num_patches_width = 4
 num_patches_height = 2
 original_width = 1280
@@ -26,8 +27,7 @@ original_height = 720
 blurred_videos_directory = "./train_blur"
 sharped_videos_directory = "./train_sharp"
 
-patches = num_patches_width * num_patches_height
-width = int(original_width/num_patches_width)       '''patches dimensions without considering overlapping'''
+width = int(original_width/num_patches_width)       #patches dimensions without considering overlapping
 height = int(original_height/num_patches_height)
 num_videos = get_num_videos(blurred_videos_directory, sharped_videos_directory)
 frames_per_video = get_frames_per_video(blurred_videos_directory)

@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import random
 import os
+import cv2
 
 from scipy.ndimage import gaussian_filter
 from sys import exit
@@ -131,7 +132,7 @@ def build_dataset(images):
 
 ### PROCESSING REDs DATASET ###
 
-def get_left_overlap(k, num_patches):
+def get_left_overlap(k, num_patches, num_conv):
     if k == 0:
         left_overlap_factor = 0
     elif k == num_patches-1:
@@ -157,17 +158,16 @@ def load_REDs(directory, num_videos, frames_per_video, original_height, original
                     loaded_dataset[(i-1)*frames_per_video+j-1, :, :, :] = img/255
     return loaded_dataset
 
-def split_REDs(loaded_dataset, num_videos, frames_per_video, patches, height, width, num_conv):
+def split_REDs(loaded_dataset, num_videos, frames_per_video, num_patches_width, num_patches_height, height, width, num_conv):
+    patches = num_patches_width*num_patches_height
     splitted_dataset = np.zeros(
         (num_videos*frames_per_video*patches, height+2*num_conv, width+2*num_conv, 3))
     for i in range(int(num_videos*frames_per_video/patches)):
         for w in range(num_patches_width):
-            left_overlap_factor_width = get_left_overlap(
-                w, num_patches_width)
+            left_overlap_factor_width = get_left_overlap(w, num_patches_width, num_conv)
             start_width = w*width-left_overlap_factor_width
             for h in range(num_patches_height):
-                left_overlap_factor_height = get_left_overlap(
-                    h, num_patches_height)
+                left_overlap_factor_height = get_left_overlap(h, num_patches_height, num_conv)
                 start_heigth = h*height-left_overlap_factor_height
                 splitted_dataset[i*patches+w*num_patches_height+h, :, :, :] = loaded_dataset[i, start_heigth:(
                     start_heigth+height+2*num_conv), start_width:(start_width+width+2*num_conv), ]
