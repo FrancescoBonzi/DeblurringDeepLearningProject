@@ -1,24 +1,21 @@
-
 import tensorflow as tf
-from tensorflow.keras import datasets
-from tensorflow.keras.layers import Conv2D, Conv2DTranspose
 
-import matplotlib.pyplot as plt
 import numpy as np
-import random
 import os
+import dill
+import time
 
-import cv2
-from scipy.ndimage import gaussian_filter
-from skimage.measure import compare_psnr, compare_ssim, compare_mse
-from utilities import load_REDs, split_REDs, print_dataset
+from utilities import load_REDs, print_dataset, extract_from_report
+from deblurring_REDs_configuration import *
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
-
 tf.keras.backend.set_floatx('float64')
 
-EPOCHS = 2
+#####################################################
+### Parameters and Hyperparameters initialization ###
+#####################################################
 
+EPOCHS = 2
 num_conv = 3
 num_patches_width = 4
 num_patches_height = 2
@@ -28,14 +25,17 @@ original_height = 720
 width = int(original_width/num_patches_width)
 height = int(original_height/num_patches_height)
 
-num_videos = len(os.listdir(directory))
-print(num_videos)
-frame_per_video = len(os.listdir(blurred_videos_directory + "/" + os.listdir(blurred_videos_directory)[1]))
-print(frame_per_video)
-
-
 blurred_videos_directory = "./train_blur"
-original_videos_directory = "./train_sharp"
+sharp_videos_directory = "./train_sharp"
+
+num_videos = len(os.listdir(blurred_videos_directory)) #counter for the number of videos in the training dataset
+frame_per_video = len(os.listdir(blurred_videos_directory + "/" + os.listdir(blurred_videos_directory)[1])) #counter for the number of frames for each video
+print('Training Dataset has', num_videos, 'videos with ', frame_per_video, 'frames each')
+
+#######################
+### LOADING DATASET ###
+#######################
+
 train_blurred_REDs = load_REDs(blurred_videos_directory)
 train_sharped_REDs = load_REDs(original_videos_directory)
 
