@@ -1,5 +1,5 @@
 import tensorflow as tf
-from utilities import get_metrics, get_other_metrics, get_model, get_loss, SSIM, PSNR
+from utilities import get_metrics, get_other_metrics, get_model, get_loss, SSIMLoss, PSNR
 tf.keras.backend.set_floatx('float64')
 
 demo = True
