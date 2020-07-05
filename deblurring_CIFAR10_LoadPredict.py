@@ -6,8 +6,6 @@ from utilities import SSIMLoss, PSNR, build_dataset, print_dataset, inspect_repo
 from deblurring_CIFAR10_configuration import *
 
 #metrics = ['loss', 'mae', 'PSNR', 'SSIM']
-test_lower_bound = 10
-test_upper_bound = 20
 
 ######################################
 ### LOAD THE MODEL AND THE DATASET ###

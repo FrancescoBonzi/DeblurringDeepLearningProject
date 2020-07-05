@@ -7,6 +7,9 @@ model_name = 'ResNet_v2'
 loss_name = 'SSIMLoss' # mse, mae, SSIMLoss, PSNR
 EPOCHS = 1
 
+test_lower_bound = 10 #parameters to limit the test prediction on a subset of the dataset
+test_upper_bound = 20
+
 metrics = get_metrics(loss_name)
 other_metrics = get_other_metrics(metrics)
 model = get_model(model_name)

@@ -12,8 +12,8 @@ from deblurring_REDs_configuration import *
 ### LOADING DATASET AND SPLIT IMAGES IN PATCHES###
 ##################################################
 
-train_blurred_REDs = load_REDs(blurred_videos_directory, num_videos, frames_per_video, original_height, original_width)
-train_sharped_REDs = load_REDs(sharped_videos_directory, num_videos, frames_per_video, original_height, original_width)
+train_blurred_REDs = load_REDs(train_blurred_videos_directory, num_videos, frames_per_video, original_height, original_width)
+train_sharped_REDs = load_REDs(train_sharped_videos_directory, num_videos, frames_per_video, original_height, original_width)
 
 print(train_blurred_REDs.shape)
 print(train_sharped_REDs.shape)

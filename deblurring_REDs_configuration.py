@@ -24,13 +24,17 @@ num_patches_width = 4
 num_patches_height = 2
 original_width = 1280
 original_height = 720
-blurred_videos_directory = "./datasetREDs/train_blur"
-sharped_videos_directory = "./datasetREDs/train_sharp"
+train_blurred_videos_directory = "./datasetREDs/train_blur"
+train_sharped_videos_directory = "./datasetREDs/train_sharp"
+test_blurred_videos_directory = "./datasetREDs/test_blur"
+test_sharped_videos_directory = "./datasetREDs/test_sharp"
 
 width = int(original_width/num_patches_width)       #patches dimensions without considering overlapping
 height = int(original_height/num_patches_height)
-num_videos = get_num_videos(blurred_videos_directory, sharped_videos_directory)
-frames_per_video = get_frames_per_video(blurred_videos_directory)
+num_videos = get_num_videos(train_blurred_videos_directory, train_sharped_videos_directory)
+frames_per_video = get_frames_per_video(train_blurred_videos_directory)
+test_num_videos = get_num_videos(test_blurred_videos_directory, test_sharped_videos_directory)
+test_frames_per_video = get_frames_per_video(test_blurred_videos_directory)
 
 
 
