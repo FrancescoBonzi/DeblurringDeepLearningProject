@@ -79,17 +79,29 @@ def get_num_videos(blurred_videos_directory, sharped_videos_directory):
     else:
         exit('Sharped and blurred images numbers do not match') 
 
-
 def get_frames_per_video(blurred_videos_directory):
     return len(os.listdir(blurred_videos_directory + "/" + os.listdir(blurred_videos_directory)[1]))
 
+
+def get_num_conv(model_name):
+    encode = {
+        'CNNBase_v1': 3,
+        'CNNBase_v2': 3,
+        'ResNet_v1': 3,
+        'ResNet_v2': 3,
+        'SkipConnections': 4
+    }
+    return encode[model_name]
 
 ########################################
 ### UTILITIES FOR DATASET PROCESSING ###
 ########################################
 
-def print_dataset(images, blurred_images, sigma, predicted_images=[], num=10):
+def print_dataset(images, blurred_images, sigma =[], predicted_images=[], num=10):
     num_plots_per_image = 2
+    print_sigma = True
+    if len(sigma) == 0:
+        print_sigma = False
     if len(predicted_images) != 0:
         num_plots_per_image = 3
     plt.figure(figsize=(4*num_plots_per_image, 4*num))
@@ -105,7 +117,7 @@ def print_dataset(images, blurred_images, sigma, predicted_images=[], num=10):
         plt.yticks([])
         plt.grid(False)
         plt.imshow(blurred_images[i])
-        plt.xlabel("Blurred with sigma={:.2f}".format(sigma[i]))
+        if print_sigma: plt.xlabel("Blurred with sigma={:.2f}".format(sigma[i]))
         if len(predicted_images) != 0:
             plt.subplot(num, num_plots_per_image, i*num_plots_per_image+3)
             plt.xticks([])
