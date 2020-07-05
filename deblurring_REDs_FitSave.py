@@ -55,12 +55,12 @@ print(end - start)
 #################################
 
 
-filename = "./reports/" + model_name + "/" + "epochs" + str(EPOCHS) + "_" + loss_name + ".obj"
+filename = "./REDs/reports/" + model_name + "/" + "epochs" + str(EPOCHS) + "_" + loss_name + ".obj"
 filehandler = open(filename, 'wb')
 list = extract_from_report(report, metrics)
 dill.dump(list, filehandler)
 
-model.save("./models/" + model_name + "/" + "epochs" + str(EPOCHS) + "_" + loss_name)
+model.save("./REDs/models/" + model_name + "/" + "epochs" + str(EPOCHS) + "_" + loss_name)
 
 
 
