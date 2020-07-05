@@ -47,7 +47,9 @@ report = model.fit(x=train_blurred_dataset,
                    callbacks=[early_stop],
                    validation_split=0.25)
 end = time.time()
-print(end - start)
+with open("./REDs/times.txt", "a") as myfile:
+    myfile.write("models: {:15}, {:>2} epochs, loss: {:8} --> TIME: {:>8.1f}s\n".format(model_name, str(EPOCHS), loss_name, (end - start)))
+
 
 
 #################################
