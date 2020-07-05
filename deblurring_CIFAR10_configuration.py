@@ -3,9 +3,9 @@ from utilities import get_metrics, get_other_metrics, get_model, get_loss, SSIML
 tf.keras.backend.set_floatx('float64')
 
 demo = True
-model_name = 'SkipConnections'
+model_name = 'ResNet_v2'
 loss_name = 'SSIMLoss' # mse, mae, SSIMLoss, PSNR
-EPOCHS = 35
+EPOCHS = 1
 
 metrics = get_metrics(loss_name)
 other_metrics = get_other_metrics(metrics)

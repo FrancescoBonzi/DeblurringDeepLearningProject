@@ -1,0 +1,1 @@
+ResNet_v2, epochs1_SSIMLoss --> TIME: 3.65

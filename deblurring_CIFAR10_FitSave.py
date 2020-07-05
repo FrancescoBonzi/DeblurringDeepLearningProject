@@ -40,6 +40,8 @@ report = model.fit(x=train_blurred_images,
                    validation_split=0.25)
 end = time.time()
 print(end - start)
+with open("./CIFAR10/times.txt", "a") as myfile:
+    myfile.write(model_name + ", " + "epochs" + str(EPOCHS) + "_" + loss_name + " --> TIME: {:.2f}".format(end - start))
 
 #################################
 #### SAVING REPORTS AND MODEL ###

@@ -24,8 +24,8 @@ num_patches_width = 4
 num_patches_height = 2
 original_width = 1280
 original_height = 720
-blurred_videos_directory = "./train_blur"
-sharped_videos_directory = "./train_sharp"
+blurred_videos_directory = "./datasetREDs/train_blur"
+sharped_videos_directory = "./datasetREDs/train_sharp"
 
 width = int(original_width/num_patches_width)       #patches dimensions without considering overlapping
 height = int(original_height/num_patches_height)
