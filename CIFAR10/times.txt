@@ -1,0 +1,1 @@
+models: ResNet_v1      , 36 epochs, loss: SSIMLoss --> TIME:  34772.7s

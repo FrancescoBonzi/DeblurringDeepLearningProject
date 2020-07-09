@@ -1,0 +1,3 @@
+models: CNNBase_v1     ,  1 epochs, loss: SSIMLoss --> TIME:   1423.8s
+models: CNNBase_v1     ,  1 epochs, loss: SSIMLoss --> TIME:   1343.0s
+models: CNNBase_v1     ,  1 epochs, loss: SSIMLoss --> TIME:   1352.4s
