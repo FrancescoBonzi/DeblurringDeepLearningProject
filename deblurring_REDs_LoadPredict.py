@@ -26,4 +26,4 @@ for i in range(int(len(prediction)/patches)):
             restored_images[i, h*height:(h+1)*height, w*width:(w+1)*width, :] = prediction[i*patches + w*num_patches_height+h, start_height:start_height+height, start_width:start_width+width, :]
                                    
 
-print_dataset(test_sharped_REDs, test_blurred_REDs, predicted_images=prediction)
+print_dataset(test_sharped_REDs, test_blurred_REDs, predicted_images=restored_images)
