@@ -3,10 +3,10 @@ from utilities import get_metrics, get_other_metrics, get_model, get_num_conv, g
 
 tf.keras.backend.set_floatx('float64')
 
-demo = True
+demo = False
 model_name = 'CNNBase_v1'
 loss_name = 'SSIMLoss' # one of: mse, mae, SSIMLoss, PSNR
-EPOCHS = 1
+EPOCHS = 50
 
 metrics = get_metrics(loss_name)
 other_metrics = get_other_metrics(metrics)
@@ -23,10 +23,10 @@ num_patches_width = 4
 num_patches_height = 2
 original_width = 320
 original_height = 180
-train_blurred_videos_directory = "./datasetREDs/train_blur"
-train_sharped_videos_directory = "./datasetREDs/train_sharp"
-test_blurred_videos_directory = "./datasetREDs/test_blur"
-test_sharped_videos_directory = "./datasetREDs/test_sharp"
+train_blurred_videos_directory = "/Users/utente/Downloads/REDs/train_blur"
+train_sharped_videos_directory = "/Users/utente/Downloads/REDs/train_sharp"
+test_blurred_videos_directory = "/Users/utente/Downloads/REDs/test_blur"
+test_sharped_videos_directory = "/Users/utente/Downloads/REDs/test_sharp"
 
 num_conv = get_num_conv(model_name)      
 width = int(original_width/num_patches_width)       #patches dimensions without considering overlapping
