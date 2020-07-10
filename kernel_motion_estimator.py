@@ -122,10 +122,10 @@ def get_motion_vector_prediction(image):
     max_probabilities_per_prediction = []
     max_label_per_prediction = []
     for k in range(6):
-        max_probabilities_per_prediction.append(np.max(predictions[k])) '''vector of the highest probabilities of each rotated_image'''
-        max_label_per_prediction.append(np.argmax(predictions[k])) '''vector of the label associated to the highest probibilities'''
-    index = np.argmax(max_probabilities_per_prediction) '''it indicates which rotation has the highest probability'''
-    label = np.argmax(predictions[index]) '''it indicates the most probable motion vector for the selcted rotated_image'''
+        max_probabilities_per_prediction.append(np.max(predictions[k])) #vector of the highest probabilities of each rotated_image
+        max_label_per_prediction.append(np.argmax(predictions[k])) #vector of the label associated to the highest probibilities'''
+    index = np.argmax(max_probabilities_per_prediction) #it indicates which rotation has the highest probability
+    label = np.argmax(predictions[index]) #it indicates the most probable motion vector for the selcted rotated_image
 
     length, orientation = convert_to_motion_vector(label)
     selected_motion_orientation = orientation + index*6
@@ -136,13 +136,12 @@ train_frames, train_labels = build_dataset_for_motion_blur("./datasetREDs/train_
 print(train_frames.shape)
 print(train_labels.shape)
 
-def show_image_with_label(img, label)
+def show_image_with_label(img, label):
     plt.figure(12)
     plt.imshow(img)
     plt.xlabel(label)
     plt.show()
 
-def show_images_with_label(images, labels, starting_from=0)
 
 batch_size = 32
 
