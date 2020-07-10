@@ -22,7 +22,7 @@ class KernelMotionEstimator(tf.keras.Model):
         self.maxpool4 = MaxPool2D(2, strides=2)
         self.flatten5 = Flatten()
         self.dense6 = Dense(1024, activation='relu')
-        self.dense7 = Dense(78, activation='softmax')
+        self.dense7 = Dense(73, activation='softmax')
 
     def call(self, input_img):
         x = self.conv1(input_img)
@@ -77,6 +77,7 @@ def build_dataset_for_motion_blur(directory, num_patches=20, dim_patches=30):
             img = cv2.imread(path)
             for orientation in range(6):
                 for length in range(1, 26, 2):
+                    if orientation != 0 and length == 1: break # for the identity matrix we don't want repetitions
                     motion_kernel = motion_kernel_generator(orientation, length)
                     conv_img = cv2.filter2D(img, -1, motion_kernel)
                     patches = extract_patches(conv_img, num_patches, dim_patches)
@@ -90,6 +91,7 @@ def convert_to_motion_vector(label):
     count = 0
     for orientation in range(6):
         for length in range(1, 26, 2):
+            if orientation != 0 and length == 1: break
             if count == label:
                 return (orientation, length)
             count += 1
@@ -99,6 +101,7 @@ def convert_to_label(o, l):
     count = 0
     for orientation in range(6):
         for length in range(1, 26, 2):
+            if orientation != 0 and length == 1: break
             if o == orientation and l == length:
                 return count
             count += 1
@@ -141,7 +144,6 @@ def show_image_with_label(img, label):
     plt.imshow(img)
     plt.xlabel(label)
     plt.show()
-
 
 batch_size = 32
 
