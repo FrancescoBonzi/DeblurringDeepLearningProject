@@ -4,7 +4,8 @@ from tensorflow.keras.layers import Conv2D, MaxPool2D, Dense, Flatten
 tf.keras.backend.set_floatx('float64')
 
 import matplotlib.pyplot as plt
-from skimage.restoration import richardson_lucy
+#from skimage.restoration import richardson_lucy
+from skimage import transform
 import numpy as np
 import os
 import random
@@ -102,6 +103,34 @@ def convert_to_label(o, l):
                 return count
             count += 1
     exit("Motion Vector not Recognised")
+
+def rotate_image(image, angle = 6, num_rotation = 6):
+    rotated_images = []
+    for k in range(num_rotation):
+        rotated_image = transform.rotate(image, -k*angle, resize = False, mode = 'constant')
+        rotated_images.append(rotated_image)
+        #plt.imshow(rotated_image)
+        #plt.show()
+    return rotated_images
+
+
+def get_motion_vector_prediction(image):
+    rotated_images = rotate_image(image)
+    predictions = motion_kernel_estimator.predict(rotated_images) 
+    #expected for each images a vector of 73 elements containing the probability associated to each label
+
+    max_probabilities_per_prediction = []
+    max_label_per_prediction = []
+    for k in range(6):
+        max_probabilities_per_prediction.append(np.max(predictions[k])) '''vector of the highest probabilities of each rotated_image'''
+        max_label_per_prediction.append(np.argmax(predictions[k])) '''vector of the label associated to the highest probibilities'''
+    index = np.argmax(max_probabilities_per_prediction) '''it indicates which rotation has the highest probability'''
+    label = np.argmax(predictions[index]) '''it indicates the most probable motion vector for the selcted rotated_image'''
+
+    length, orientation = convert_to_motion_vector(label)
+    selected_motion_orientation = orientation + index*6
+
+    return length, selected_motion_orientation
 
 train_frames, train_labels = build_dataset_for_motion_blur("./datasetREDs/train_sharp", num_patches=5)
 print(train_frames.shape)
