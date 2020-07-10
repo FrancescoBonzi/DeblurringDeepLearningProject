@@ -36,9 +36,9 @@ model.summary()
 
 
 # The patience parameter is the amount of epochs to check for improvement
-early_stop = tf.keras.callbacks.EarlyStopping(    monitor='loss', min_delta=0.0001, patience=3)
+early_stop = tf.keras.callbacks.EarlyStopping(monitor='loss', min_delta=0.0001, patience=3)
 
-model.compile(loss='mse', optimizer=tf.keras.optimizers.Adam(), metrics=[SSIMLoss, 'mae', PSNR])
+model.compile(loss=loss, optimizer=tf.keras.optimizers.Adam(), metrics=other_metrics)
 start = time.time()
 report = model.fit(x=train_blurred_dataset,
                    y=train_sharped_dataset,

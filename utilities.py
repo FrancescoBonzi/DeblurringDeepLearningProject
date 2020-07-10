@@ -44,7 +44,7 @@ def get_metrics(loss):
     for i in range(len(base_metrics)):
         if base_metrics[i] != loss:
             metrics.append(base_metrics[i])
-    print('Metrics: ', metrics)
+    #print('Metrics: ', metrics)
     return metrics
 
 def get_other_metrics(metrics):
@@ -52,7 +52,7 @@ def get_other_metrics(metrics):
     for m in metrics:
         if m != 'loss':
             other_metrics.append(encode_loss[m])
-    print('Other Metrics: ', other_metrics)
+    #print('Other Metrics: ', other_metrics)
     return other_metrics
 
 def get_model(model_name):
@@ -64,7 +64,7 @@ def get_model(model_name):
         'SkipConnections': DeblurringSkipConnections()
     }
     model = encode[model_name]
-    print(model)
+    #print(model)
     return model
     
 def get_loss(loss_name):
@@ -97,7 +97,7 @@ def get_num_conv(model_name):
 ### UTILITIES FOR DATASET PROCESSING ###
 ########################################
 
-def print_dataset(images, blurred_images, sigma =[], predicted_images=[], num=10):
+def print_dataset(images, blurred_images, sigma=[], predicted_images=[], num=10):
     num_plots_per_image = 2
     print_sigma = True
     if len(sigma) == 0:
@@ -130,9 +130,10 @@ def print_dataset(images, blurred_images, sigma =[], predicted_images=[], num=10
 
 ### PROCESSING CIFAR10 DATASET ###
 
-def build_dataset(images):
+def build_dataset(images, always_the_same=False):
     blurred_images = []
     rands = []
+    if always_the_same: random.seed(9001)
     for i in range(images.shape[0]):
         rand = random.uniform(0, 3)
         rands.append(rand)

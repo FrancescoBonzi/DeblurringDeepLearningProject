@@ -21,8 +21,8 @@ loss = get_loss(loss_name)
     
 num_patches_width = 4
 num_patches_height = 2
-original_width = 1280
-original_height = 720
+original_width = 320
+original_height = 180
 train_blurred_videos_directory = "./datasetREDs/train_blur"
 train_sharped_videos_directory = "./datasetREDs/train_sharp"
 test_blurred_videos_directory = "./datasetREDs/test_blur"
