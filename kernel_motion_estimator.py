@@ -157,8 +157,14 @@ model.compile(optimizer='adam',
 history = model.fit(train_frames, train_labels, batch_size=batch_size, epochs=2, validation_split=0.25)
 
 ### TEST ###
-
 test_frames, test_labels = build_dataset_for_motion_blur("./datasetREDs/test_sharp", num_patches=5)
+predicted_motion_vectors = []
+for frame in test_frames:
+    predicted_length, predicted_orientation = get_motion_vector_prediction(frame)
+    predicted_motion_vectors.append((predicted_length, predicted_orientation))
+
+
+'''test_frames, test_labels = build_dataset_for_motion_blur("./datasetREDs/test_sharp", num_patches=5)
 predictions = model.predict(test_frames)
 for i in range(10):
-    print(i, " --> predicted:", np.argmax(predictions[i]), ", real: ", int(test_labels[i]))
+    print(i, " --> predicted:", np.argmax(predictions[i]), ", real: ", int(test_labels[i]))'''
