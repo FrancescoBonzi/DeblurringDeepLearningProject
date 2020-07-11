@@ -1,1 +1,3 @@
 models: ResNet_v1      , 36 epochs, loss: SSIMLoss --> TIME:  34772.7s
+models: SkipConnections, 4 epochs, loss: mse      --> TIME:   6277.8s   EARLY STOP
+models: ResNet_v1      , 35 epochs, loss: mse      --> TIME:  31256.8s  EARLY STOP
