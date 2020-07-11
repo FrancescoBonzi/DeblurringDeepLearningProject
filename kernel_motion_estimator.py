@@ -11,7 +11,7 @@ import os
 import random
 import cv2
 from math import sin, pi
-from utilities import print_dataset
+from utilities import print_dataset, rebuild_images
 
 class KernelMotionEstimator(tf.keras.Model):
     def __init__(self):
@@ -42,9 +42,9 @@ def extract_patches(conv_img, num_patches, dim_patches):
         patches.append(conv_img[u:u+dim_patches, v:v+dim_patches])
     return np.array(patches, dtype=float)
 
-def motion_kernel_generator(k, length): #k indicate which multiple of 30°
-    l = length
-    p = int(l/2)
+def motion_kernel_generator(angle, length): 
+    l = 20
+    p = int(l/2)-1
    
     motion_kernel = np.zeros((l,l))
     for x in range(int(length/2)+1):
@@ -55,11 +55,11 @@ def motion_kernel_generator(k, length): #k indicate which multiple of 30°
             motion_kernel[p+x, p] = 1 / length
             motion_kernel[p-x, p] = 1 / length
         elif k>0 and k<3:
-            motion_kernel[round(p-x*sin(k*pi/6)), p+x] = 1 / length
-            motion_kernel[round(p+x*sin(k*pi/6)), p-x] = 1 / length
+            motion_kernel[round(p-x*sin(angle)), p+x] = 1 / length
+            motion_kernel[round(p+x*sin(angle)), p-x] = 1 / length
         else:
-            motion_kernel[round(p+x*sin(k*pi/6)), p+x] = 1 / length
-            motion_kernel[round(p-x*sin(k*pi/6)), p-x] = 1 / length
+            motion_kernel[round(p+x*sin(angle)), p+x] = 1 / length
+            motion_kernel[round(p-x*sin(angle)), p-x] = 1 / length
     return motion_kernel
 
 # It builds the REDs dataset of motion blurred patches
@@ -75,13 +75,14 @@ def build_dataset_for_motion_blur(directory, num_patches=20, dim_patches=30):
             path = directory + "/" + os.listdir(directory)[i] + "/" + os.listdir(directory + "/" + os.listdir(directory)[i])[j]
             print(path)
             img = cv2.imread(path)
-            for orientation in range(6):
+            for k in range(6):
                 for length in range(1, 26, 2):
-                    if orientation != 0 and length == 1: break # for the identity matrix we don't want repetitions
+                    if k != 0 and length == 1: break # for the identity matrix we don't want repetitions
+                    orientation = k*pi/6
                     motion_kernel = motion_kernel_generator(orientation, length)
                     conv_img = cv2.filter2D(img, -1, motion_kernel)
                     patches = extract_patches(conv_img, num_patches, dim_patches)
-                    label = convert_to_label(orientation, length)
+                    label = convert_to_label(length, orientation)
                     for patch in patches:
                         dataset.append(patch)
                         labels.append(label)
@@ -93,11 +94,11 @@ def convert_to_motion_vector(label):
         for length in range(1, 26, 2):
             if orientation != 0 and length == 1: break
             if count == label:
-                return (orientation, length)
+                return (length, orientation)
             count += 1
     exit("Label Out of Bounds")
 
-def convert_to_label(o, l):
+def convert_to_label(l, o):
     count = 0
     for orientation in range(6):
         for length in range(1, 26, 2):
@@ -135,15 +136,32 @@ def get_motion_vector_prediction(image):
 
     return length, selected_motion_orientation
 
-train_frames, train_labels = build_dataset_for_motion_blur("./datasetREDs/train_sharp", num_patches=5)
-print(train_frames.shape)
-print(train_labels.shape)
+def motion_field_predictor(image):
+    reshaped_image = np.reshape(image, (1, imahe.shape[0], image.shape[1], image.shape[2]))
+    patches = split_REDs(reshaped_image, 1, 1, num_patches_width, num_patches_height, height, width, 1)
+    predicted_motion_vectors = []
+    predicted_motion_kernels = []
+    for patch in patches:
+        predicted_length, predicted_orientation = get_motion_vector_prediction(patch)
+        predicted_motion_vectors.append((predicted_length, predicted_orientation))
+        predicted_motion_kernels.append(motion_kernel_generator(predicted_length, predicted_orientation))
+    return predicted_motion_kernels, predicted_motion_vectors
+
 
 def show_image_with_label(img, label):
     plt.figure(12)
     plt.imshow(img)
     plt.xlabel(label)
     plt.show()
+
+
+############
+### MAIN ###
+############
+
+train_frames, train_labels = build_dataset_for_motion_blur("./datasetREDs/train_sharp", num_patches=5)
+print(train_frames.shape)
+print(train_labels.shape)
 
 batch_size = 32
 

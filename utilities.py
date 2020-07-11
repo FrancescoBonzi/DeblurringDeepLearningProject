@@ -187,6 +187,20 @@ def split_REDs(loaded_dataset, num_videos, frames_per_video, num_patches_width, 
     return splitted_dataset
 
 
+def rebuild_images(patches, num_patches_height, num_patches_width, original_height, original_width, height, width, num_conv):
+    num_patches = num_patches_height*num_patches_width
+    restored_images = np.zeros((int(len(patches)/num_patches), original_height, original_width, 3))
+    
+    for i in range(int(len(patches)/num_patches)):
+        for w in range(num_patches_width):
+            start_width = get_overlap(w, num_patches_width, num_conv)
+            for h in range(num_patches_height):
+                start_height = get_overlap(h, num_patches_height, num_conv)
+                restored_images[i, h*height:(h+1)*height, w*width:(w+1)*width, :] = patches[i*num_patches + w*num_patches_height+h, start_height:start_height+height, start_width:start_width+width, :]
+    
+    return restored_images
+
+
 ####################################
 ### REPORT OF ACCURACY FUNCTIONS ###
 ####################################
