@@ -11,14 +11,24 @@ import os
 import random
 import cv2
 from math import sin, pi
-from utilities import print_dataset, rebuild_images
+from utilities import print_dataset, rebuild_images, load_REDs, get_frames_per_video, get_num_videos
+
+num_patches_width = 16 
+num_patches_height = 6 
+width = 320
+height = 180
+motion_kernel_size = 20
+
+test_directory = "./datasetREDs/test_blur"
+test_num_videos = len(os.listdir(test_directory))
+test_frames_per_video = len(os.listdir(test_directory + "/" + os.listdir(test_directory)[1]))
 
 class KernelMotionEstimator(tf.keras.Model):
     def __init__(self):
         super(KernelMotionEstimator, self).__init__()
-        self.conv1 = Conv2D(96, 7, activation='relu')
+        self.conv1 = Conv2D(96, 5, activation='relu')
         self.maxpool2 = MaxPool2D(2, strides=2)
-        self.conv3 = Conv2D(256, 5, activation='relu')
+        self.conv3 = Conv2D(256, 3, activation='relu')
         self.maxpool4 = MaxPool2D(2, strides=2)
         self.flatten5 = Flatten()
         self.dense6 = Dense(1024, activation='relu')
@@ -43,18 +53,18 @@ def extract_patches(conv_img, num_patches, dim_patches):
     return np.array(patches, dtype=float)
 
 def motion_kernel_generator(angle, length): 
-    l = 20
+    l = motion_kernel_size  #size of motion kernel should be an even number
     p = int(l/2)-1
    
     motion_kernel = np.zeros((l,l))
     for x in range(int(length/2)+1):
-        if k == 0:
+        if angle == 0:
             motion_kernel[p, p+x] = 1 / length
             motion_kernel[p, p-x] = 1 / length
-        elif k == p:
+        elif angle == pi/2:
             motion_kernel[p+x, p] = 1 / length
             motion_kernel[p-x, p] = 1 / length
-        elif k>0 and k<3:
+        elif angle < pi/2:
             motion_kernel[round(p-x*sin(angle)), p+x] = 1 / length
             motion_kernel[round(p+x*sin(angle)), p-x] = 1 / length
         else:
@@ -64,7 +74,7 @@ def motion_kernel_generator(angle, length):
 
 # It builds the REDs dataset of motion blurred patches
 # We suppose .DS_Store is not in the directories
-def build_dataset_for_motion_blur(directory, num_patches=20, dim_patches=30):
+def build_dataset_for_motion_blur(directory, num_patches=20, dim_patches=20):
     dataset = []
     labels = []
     num_videos = len(os.listdir(directory))
@@ -76,7 +86,7 @@ def build_dataset_for_motion_blur(directory, num_patches=20, dim_patches=30):
             print(path)
             img = cv2.imread(path)
             for k in range(6):
-                for length in range(1, 26, 2):
+                for length in range(1, motion_kernel_size+1, 2):
                     if k != 0 and length == 1: break # for the identity matrix we don't want repetitions
                     orientation = k*pi/6
                     motion_kernel = motion_kernel_generator(orientation, length)
@@ -136,9 +146,8 @@ def get_motion_vector_prediction(image):
 
     return length, selected_motion_orientation
 
-def motion_field_predictor(image):
-    reshaped_image = np.reshape(image, (1, imahe.shape[0], image.shape[1], image.shape[2]))
-    patches = split_REDs(reshaped_image, 1, 1, num_patches_width, num_patches_height, height, width, 1)
+def motion_field_predictor(images):
+    patches = split_REDs(images, test_num_videos, test_frames_per_video, num_patches_width, num_patches_height, height, width, 0)
     predicted_motion_vectors = []
     predicted_motion_kernels = []
     for patch in patches:
@@ -175,14 +184,10 @@ model.compile(optimizer='adam',
 history = model.fit(train_frames, train_labels, batch_size=batch_size, epochs=2, validation_split=0.25)
 
 ### TEST ###
-test_frames, test_labels = build_dataset_for_motion_blur("./datasetREDs/test_sharp", num_patches=5)
-predicted_motion_vectors = []
-for frame in test_frames:
-    predicted_length, predicted_orientation = get_motion_vector_prediction(frame)
-    predicted_motion_vectors.append((predicted_length, predicted_orientation))
+
+test_blurred_REDs = load_REDs("./datasetREDs/test_blur", test_num_videos, test_frames_per_video, original_height, original_width)
+predicted_motion_kernels, predicted_motion_vectors = motion_field_predictor(test_blurred_REDs)
+motion_fields = rebuild_images(predicted_motion_kernels, num_patches_height, num_patches_width, original_width, original_height, height, width, 0)
+print_dataset(test_blurred_REDs, motion_fields)
 
 
-'''test_frames, test_labels = build_dataset_for_motion_blur("./datasetREDs/test_sharp", num_patches=5)
-predictions = model.predict(test_frames)
-for i in range(10):
-    print(i, " --> predicted:", np.argmax(predictions[i]), ", real: ", int(test_labels[i]))'''
