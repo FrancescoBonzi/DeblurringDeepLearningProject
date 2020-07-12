@@ -1,12 +1,13 @@
 import tensorflow as tf
 from utilities import get_metrics, get_other_metrics, get_model, get_num_conv, get_loss, SSIMLoss, PSNR, get_num_videos, get_frames_per_video
+from REDs_directories import *
 
 tf.keras.backend.set_floatx('float64')
 
-demo = False
+demo = True
 model_name = 'CNNBase_v1'
 loss_name = 'SSIMLoss' # one of: mse, mae, SSIMLoss, PSNR
-EPOCHS = 1
+EPOCHS = 2
 
 metrics = get_metrics(loss_name)
 other_metrics = get_other_metrics(metrics)
@@ -23,11 +24,12 @@ num_patches_width = 4
 num_patches_height = 2
 original_width = 320
 original_height = 180
-#/Users/utente/Downloads/REDs
-train_blurred_videos_directory = "./datasetREDs/train_blur"
-train_sharped_videos_directory = "./datasetREDs/train_sharp"
-test_blurred_videos_directory = "./datasetREDs/test_blur"
-test_sharped_videos_directory = "./datasetREDs/test_sharp"
+
+if demo:
+    train_blurred_videos_directory = "./datasetREDs/train_blur"
+    train_sharped_videos_directory = "./datasetREDs/train_sharp"
+    test_blurred_videos_directory = "./datasetREDs/test_blur"
+    test_sharped_videos_directory = "./datasetREDs/test_sharp"
 
 num_conv = get_num_conv(model_name)      
 width = int(original_width/num_patches_width)       #patches dimensions without considering overlapping
