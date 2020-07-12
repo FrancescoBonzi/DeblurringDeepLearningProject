@@ -2,7 +2,7 @@ import tensorflow as tf
 from utilities import get_metrics, get_other_metrics, get_model, get_loss, SSIMLoss, PSNR
 tf.keras.backend.set_floatx('float64')
 
-demo = False
+demo = True
 model_name = 'SkipConnections'
 loss_name = 'SSIMLoss' # mse, mae, SSIMLoss, PSNR
 EPOCHS = 35
