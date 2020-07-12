@@ -28,9 +28,9 @@ report = dill.load(filehandler)
 ################################
 
 predictions = loaded_model.predict(test_blurred_dataset)
-#print_dataset(test_blurred_dataset, prediction)
-print(loaded_model.evaluate(x=predictions, y=test_sharped_dataset, batch_size=32))
-print(loaded_model.metrics_names)
+print_dataset(test_blurred_dataset, predictions)
+#print(loaded_model.evaluate(x=predictions, y=test_sharped_dataset, batch_size=32))
+#print(loaded_model.metrics_names)
 
 ################################
 ### RESTORE AND SHOW RESULTS ###

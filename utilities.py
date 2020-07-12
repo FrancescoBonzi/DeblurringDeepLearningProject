@@ -13,9 +13,9 @@ from sys import exit
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
 
-########################################
+#########################################
 ### DEFINITION OF SOME LOSS FUNCTIONS ###
-########################################
+#########################################
 
 def SSIMLoss(y_true, y_pred):
     return 1 - tf.reduce_mean(tf.image.ssim(y_true, y_pred, 1.0))
@@ -70,8 +70,9 @@ def get_model(model_name):
 def get_loss(loss_name):
     return encode_loss[loss_name]
 
-
+########################################
 ### UTILITIES FOR REDs CONFIGURATION ###
+########################################
 
 def get_num_videos(blurred_videos_directory, sharped_videos_directory):
     if len(os.listdir(blurred_videos_directory)) == len(os.listdir(sharped_videos_directory)):
@@ -127,8 +128,9 @@ def print_dataset(images, blurred_images, sigma=[], predicted_images=[], num=5):
             plt.xlabel("Predicted")
     plt.show()
 
-
+##################################
 ### PROCESSING CIFAR10 DATASET ###
+##################################
 
 def build_dataset(images, always_the_same=False):
     blurred_images = []
@@ -142,8 +144,9 @@ def build_dataset(images, always_the_same=False):
     blurred_images = np.array(blurred_images)
     return blurred_images, rands
 
-
-### PROCESSING REDs DATASET ###
+###############################
+### PROCESSING REDS DATASET ###
+###############################
 
 def get_overlap(k, num_patches, num_conv):
     if k == 0:
@@ -173,8 +176,6 @@ def load_REDs(directory, num_videos, frames_per_video, original_height, original
 
 def split_REDs(loaded_dataset, num_videos, frames_per_video, num_patches_width, num_patches_height, height, width, num_conv):
     patches = num_patches_width*num_patches_height
-    #splitted_dataset = np.zeros(
-    #    (num_videos*frames_per_video*patches, height+2*num_conv, width+2*num_conv, 3))
     splitted_dataset = []
     for i in range(int(num_videos*frames_per_video)):
         for w in range(num_patches_width):
@@ -183,8 +184,6 @@ def split_REDs(loaded_dataset, num_videos, frames_per_video, num_patches_width, 
             for h in range(num_patches_height):
                 upper_overlap_factor_height = get_overlap(h, num_patches_height, num_conv)
                 start_heigth = h*height-upper_overlap_factor_height
-                #splitted_dataset[i*patches+w*num_patches_height+h, :, :, :] = loaded_dataset[i, start_heigth:(
-                #    start_heigth+height+2*num_conv), start_width:(start_width+width+2*num_conv), ]
                 splitted_dataset.append(loaded_dataset[i, start_heigth:(start_heigth+height+2*num_conv), start_width:(start_width+width+2*num_conv),:])
             #plt.imshow(splitted_dataset[i*patches+w*num_patches_height+h, :, :, :])
             #plt.show()
@@ -194,14 +193,12 @@ def split_REDs(loaded_dataset, num_videos, frames_per_video, num_patches_width, 
 def rebuild_images(patches, num_patches_height, num_patches_width, original_height, original_width, height, width, num_conv):
     num_patches = num_patches_height*num_patches_width
     restored_images = np.zeros((int(len(patches)/num_patches), original_height, original_width, 3))
-    
     for i in range(int(len(patches)/num_patches)):
         for w in range(num_patches_width):
             start_width = get_overlap(w, num_patches_width, num_conv)
             for h in range(num_patches_height):
                 start_height = get_overlap(h, num_patches_height, num_conv)
                 restored_images[i, h*height:(h+1)*height, w*width:(w+1)*width, :] = patches[i*num_patches + w*num_patches_height+h, start_height:start_height+height, start_width:start_width+width, :]
-    
     return restored_images
 
 
@@ -220,10 +217,8 @@ def extract_from_report(report, metrics):
 def inspect_report(report, metrics):
     """ Retrieve a list of list results on training and test data
         sets for each training epoch """
-
     epochs = range(1, len(report[0])+1)  # Get number of epochs
     xlabel = 'epochs'
-
     for i in range(len(metrics)):
         label = metrics[i]
         plt.plot(epochs, report[i], label=label)
