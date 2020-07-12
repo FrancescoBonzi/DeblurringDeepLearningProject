@@ -173,18 +173,22 @@ def load_REDs(directory, num_videos, frames_per_video, original_height, original
 
 def split_REDs(loaded_dataset, num_videos, frames_per_video, num_patches_width, num_patches_height, height, width, num_conv):
     patches = num_patches_width*num_patches_height
-    splitted_dataset = np.zeros(
-        (num_videos*frames_per_video*patches, height+2*num_conv, width+2*num_conv, 3))
-    for i in range(int(num_videos*frames_per_video/patches)):
+    #splitted_dataset = np.zeros(
+    #    (num_videos*frames_per_video*patches, height+2*num_conv, width+2*num_conv, 3))
+    splitted_dataset = []
+    for i in range(int(num_videos*frames_per_video)):
         for w in range(num_patches_width):
             left_overlap_factor_width = get_overlap(w, num_patches_width, num_conv)
             start_width = w*width-left_overlap_factor_width
             for h in range(num_patches_height):
                 upper_overlap_factor_height = get_overlap(h, num_patches_height, num_conv)
                 start_heigth = h*height-upper_overlap_factor_height
-                splitted_dataset[i*patches+w*num_patches_height+h, :, :, :] = loaded_dataset[i, start_heigth:(
-                    start_heigth+height+2*num_conv), start_width:(start_width+width+2*num_conv), ]
-    return splitted_dataset
+                #splitted_dataset[i*patches+w*num_patches_height+h, :, :, :] = loaded_dataset[i, start_heigth:(
+                #    start_heigth+height+2*num_conv), start_width:(start_width+width+2*num_conv), ]
+                splitted_dataset.append(loaded_dataset[i, start_heigth:(start_heigth+height+2*num_conv), start_width:(start_width+width+2*num_conv),:])
+            #plt.imshow(splitted_dataset[i*patches+w*num_patches_height+h, :, :, :])
+            #plt.show()
+    return np.array(splitted_dataset)
 
 
 def rebuild_images(patches, num_patches_height, num_patches_width, original_height, original_width, height, width, num_conv):
