@@ -97,7 +97,7 @@ def get_num_conv(model_name):
 ### UTILITIES FOR DATASET PROCESSING ###
 ########################################
 
-def print_dataset(images, blurred_images, sigma=[], predicted_images=[], num=10):
+def print_dataset(images, blurred_images, sigma=[], predicted_images=[], num=5):
     num_plots_per_image = 2
     print_sigma = True
     if len(sigma) == 0:

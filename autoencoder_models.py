@@ -31,7 +31,6 @@ class ResnetLayer(tf.keras.layers.Layer):
 class DeblurringCNNBase_v1(tf.keras.Model):
     def __init__(self):
         super(DeblurringCNNBase_v1, self).__init__()
-        self.batch_norm = BatchNormalization()
         self.conv1 = Conv2D(32, 3, activation='relu')
         self.conv2 = Conv2D(64, 3, activation='relu')
         self.conv3 = Conv2D(128, 3, activation='relu')
@@ -43,17 +42,11 @@ class DeblurringCNNBase_v1(tf.keras.Model):
 
     def call(self, x):
         x = self.conv1(x)
-        x = self.batch_norm(x)
         x = self.conv2(x)
-        x = self.batch_norm(x)
         x = self.conv3(x)
-        x = self.batch_norm(x)
         x = self.deconv1(x)
-        x = self.batch_norm(x)
         x = self.deconv2(x)
-        x = self.batch_norm(x)
         x = self.deconv3(x)
-        x = self.batch_norm(x)
         x = self.output_layer(x)
         return x
 
