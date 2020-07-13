@@ -162,16 +162,16 @@ def load_REDs(directory, num_videos, frames_per_video, original_height, original
     loaded_dataset = np.zeros(
         (num_videos*frames_per_video, original_height, original_width, 3))
     videos = sorted(os.listdir(directory))
-    for i, dir in enumerate(videos):
-        path = directory + "/" + dir
+    for i in range(num_videos):
+        path = directory + "/" + videos[i]
         if os.path.isdir(path):
             frames = sorted(os.listdir(path))
             print("loading ", path, "...")
-            for j, frame in enumerate(frames):
-                path_frame = path + "/" + frame
+            for j in range(frames_per_video):
+                path_frame = path + "/" + frames[j]
                 if os.path.isfile(path_frame) and path_frame.endswith(".png"):
                     img = cv2.imread(path_frame)
-                    loaded_dataset[(i-1)*frames_per_video+j-1, :, :, :] = img/255
+                    loaded_dataset[i*frames_per_video+j, :, :, :] = img/255
     return loaded_dataset
 
 def split_REDs(loaded_dataset, num_videos, frames_per_video, num_patches_width, num_patches_height, height, width, num_conv):
