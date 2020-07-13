@@ -36,6 +36,7 @@ width = int(original_width/num_patches_width)       #patches dimensions without 
 height = int(original_height/num_patches_height)
 num_videos = get_num_videos(train_blurred_videos_directory, train_sharped_videos_directory)
 frames_per_video = get_frames_per_video(train_blurred_videos_directory)
+frames_per_video = 50
 test_num_videos = get_num_videos(test_blurred_videos_directory, test_sharped_videos_directory)
 test_frames_per_video = get_frames_per_video(test_blurred_videos_directory)
 
