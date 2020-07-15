@@ -35,8 +35,8 @@ inspect_report(report, metrics)
 test_blurred_images, test_rands = build_dataset(test_images, always_the_same=True)
 predicted_images = loaded_model.predict(test_blurred_images)
 
-print(loaded_model.evaluate(x=predicted_images, y=test_images, batch_size=32))
 print(loaded_model.metrics_names)
+print(loaded_model.evaluate(x=predicted_images, y=test_images, batch_size=32))
 
 print_dataset(test_images, test_blurred_images, test_rands, predicted_images=predicted_images, num=5)
 
