@@ -20,7 +20,7 @@ loss = get_loss(loss_name)
 ### RESIZING ORIGINAL IMAGES SHAPE  ###
 #######################################
     
-num_patches_width = 4
+num_patches_width = 3
 num_patches_height = 2
 original_width = 320
 original_height = 180
