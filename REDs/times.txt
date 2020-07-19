@@ -1,0 +1,2 @@
+models: CNNBase_v1     , 30 epochs, loss: SSIMLoss --> TIME: 261727.6s
+models: SkipConnections, 30 epochs, loss: SSIMLoss --> TIME:  37572.7s

@@ -22,9 +22,7 @@ def SSIMLoss(y_true, y_pred):
 
 
 def PSNR(y_true, y_pred):
-    mse = tf.keras.losses.MeanSquaredError()(y_true, y_pred)
-    log10 = 2.303  # it is equivalent to ln(10)
-    return 10 * tf.keras.backend.log(255 * 255 / mse) / log10
+    return tf.image.psnr(y_true, y_pred, 1.0)
 
 
 ###################################
@@ -221,8 +219,8 @@ def inspect_report(report, metrics):
     xlabel = 'epochs'
     for i in range(len(metrics)):
         label = metrics[i]
-        plt.plot(epochs, report[i], label=label)
-        plt.plot(epochs, report[i+1], label='val_' + label)
+        plt.plot(epochs, report[2*i], label=label)
+        plt.plot(epochs, report[2*i+1], label='val_' + label)
         plt.title('Training and validation ' + label)
         plt.xlabel(xlabel)
         plt.legend()

@@ -5,7 +5,7 @@ tf.keras.backend.set_floatx('float64')
 demo = True
 model_name = 'SkipConnections'
 loss_name = 'SSIMLoss' # mse, mae, SSIMLoss, PSNR
-EPOCHS = 35
+EPOCHS = 5
 other_EPOCHS = 15
 
 test_lower_bound = 10 #parameters to limit the test prediction on a subset of the dataset
