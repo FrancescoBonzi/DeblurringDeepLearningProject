@@ -163,11 +163,16 @@ class DeblurringSkipConnections_v2(tf.keras.Model):
         self.conv8 = Conv2D(16, 3, activation='relu', padding='same')
         self.conv9 = Conv2D(16, 3, activation='relu', padding='same')
         self.conv10 = Conv2D(16, 3, activation='relu', padding='same')
-        self.conv11 = Conv2D(32, 3, activation='relu')
-        self.conv12 = Conv2D(32, 3, activation='relu', padding='same')
-        self.conv13 = Conv2D(32, 3, activation='relu', padding='same')
-        self.conv14 = Conv2D(32, 3, activation='relu', padding='same')
-        self.conv15 = Conv2D(32, 3, activation='relu', padding='same')
+        self.conv11 = Conv2D(16, 3, activation='relu')
+        self.conv12 = Conv2D(16, 3, activation='relu', padding='same')
+        self.conv13 = Conv2D(16, 3, activation='relu', padding='same')
+        self.conv14 = Conv2D(16, 3, activation='relu', padding='same')
+        self.conv15 = Conv2D(16, 3, activation='relu', padding='same')
+        self.conv16 = Conv2D(32, 3, activation='relu')
+        self.conv17 = Conv2D(32, 3, activation='relu', padding='same')
+        self.conv18 = Conv2D(32, 3, activation='relu', padding='same')
+        self.conv19 = Conv2D(32, 3, activation='relu', padding='same')
+        self.conv20 = Conv2D(32, 3, activation='relu', padding='same')
 
         self.deconv1 = Conv2DTranspose(32, 3, activation='relu')
         self.deconv2 = Conv2DTranspose(32, 3, activation='relu', padding='same')
@@ -185,41 +190,46 @@ class DeblurringSkipConnections_v2(tf.keras.Model):
         self.deconv14 = Conv2DTranspose(8, 3, activation='relu', padding='same')
         self.deconv15 = Conv2DTranspose(8, 3, activation='relu', padding='same')
         self.output_layer = Conv2DTranspose(
-            3, 3, activation='relu', padding='same')
+            3, 3, activation='relu')
 
     def call(self, input):
-        c1 = self.conv1(input)
+        c1 = self.conv1(input) #
         c2 = self.conv2(c1)
         c3 = self.conv3(c2)
         c4 = self.conv4(c3)
         c5 = self.conv5(c4)
-        c6 = self.conv6(c5)
+        c6 = self.conv6(c5) #
         c7 = self.conv7(c6)
         c8 = self.conv8(c7)
         c9 = self.conv9(c8)
         c10 = self.conv10(c9)
-        c11 = self.conv11(c10)
+        c11 = self.conv11(c10) #
         c12 = self.conv12(c11)
         c13 = self.conv13(c12)
         c14 = self.conv14(c13)
         c15 = self.conv15(c14)
+        c16 = self.conv16(c15) #
+        c17 = self.conv17(c16)
+        c18 = self.conv18(c17)
+        c19 = self.conv19(c18)
+        c20 = self.conv20(c19)
 
-        d1 = self.deconv1(c15)
+        d1 = self.deconv1(c20) #
         d2 = self.deconv2(d1)
-        d3 = self.deconv3(d2 + c11)
+        d3 = self.deconv3(d2)
         d4 = self.deconv4(d3)
         d5 = self.deconv5(d4)
-        d6 = self.deconv6(d5)
+        d6 = self.deconv6(d5) #
         d7 = self.deconv7(d6)
         d8 = self.deconv8(d7)
         d9 = self.deconv9(d8)
         d10 = self.deconv10(d9)
-        d11 = self.deconv11(d10)
+        d11 = self.deconv11(d10 + c6) #
         d12 = self.deconv12(d11)
-        d13 = self.deconv13(d12)
+        d13 = self.deconv13(d12 + c4)
         d14 = self.deconv14(d13)
-        d15 = self.deconv15(d14)
-        x = self.output_layer(d15)
+        d15 = self.deconv15(d14 + c2)
+        x = self.output_layer(d15) #
         return x + input
 
 
