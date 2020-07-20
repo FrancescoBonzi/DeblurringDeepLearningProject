@@ -4,10 +4,10 @@ from REDs_directories import *
 
 tf.keras.backend.set_floatx('float64')
 
-demo = True
+demo = False
 model_name = 'ResNet_v1'
 loss_name = 'SSIMLoss' # one of: mse, mae, SSIMLoss, PSNR
-EPOCHS = 1
+EPOCHS = 30
 
 metrics = get_metrics(loss_name)
 other_metrics = get_other_metrics(metrics)
