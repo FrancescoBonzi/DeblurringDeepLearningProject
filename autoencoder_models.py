@@ -125,9 +125,9 @@ class DeblurringCNNBase_v2(tf.keras.Model):
         return x
 
 
-class DeblurringSkipConnections(tf.keras.Model):
+class DeblurringSkipConnections_v1(tf.keras.Model):
     def __init__(self):
-        super(DeblurringSkipConnections, self).__init__()
+        super(DeblurringSkipConnections_v1, self).__init__()
         self.conv1 = Conv2D(32, 3, activation='relu')
         self.conv2 = Conv2D(64, 3, activation='relu')
         self.conv3 = Conv2D(64, 3, activation='relu')
@@ -148,7 +148,80 @@ class DeblurringSkipConnections(tf.keras.Model):
         d4 = self.deconv4(d3)
         output_img = d4 + input_img
         return output_img
-        
+
+
+class DeblurringSkipConnections_v2(tf.keras.Model):
+    def __init__(self):
+        super(DeblurringSkipConnections_v2, self).__init__()
+        self.conv1 = Conv2D(8, 3, activation='relu')
+        self.conv2 = Conv2D(8, 3, activation='relu', padding='same')
+        self.conv3 = Conv2D(8, 3, activation='relu', padding='same')
+        self.conv4 = Conv2D(8, 3, activation='relu', padding='same')
+        self.conv5 = Conv2D(8, 3, activation='relu', padding='same')
+        self.conv6 = Conv2D(16, 3, activation='relu')
+        self.conv7 = Conv2D(16, 3, activation='relu', padding='same')
+        self.conv8 = Conv2D(16, 3, activation='relu', padding='same')
+        self.conv9 = Conv2D(16, 3, activation='relu', padding='same')
+        self.conv10 = Conv2D(16, 3, activation='relu', padding='same')
+        self.conv11 = Conv2D(32, 3, activation='relu')
+        self.conv12 = Conv2D(32, 3, activation='relu', padding='same')
+        self.conv13 = Conv2D(32, 3, activation='relu', padding='same')
+        self.conv14 = Conv2D(32, 3, activation='relu', padding='same')
+        self.conv15 = Conv2D(32, 3, activation='relu', padding='same')
+
+        self.deconv1 = Conv2DTranspose(32, 3, activation='relu')
+        self.deconv2 = Conv2DTranspose(32, 3, activation='relu', padding='same')
+        self.deconv3 = Conv2DTranspose(32, 3, activation='relu', padding='same')
+        self.deconv4 = Conv2DTranspose(32, 3, activation='relu', padding='same')
+        self.deconv5 = Conv2DTranspose(32, 3, activation='relu', padding='same')
+        self.deconv6 = Conv2DTranspose(16, 3, activation='relu')
+        self.deconv7 = Conv2DTranspose(16, 3, activation='relu', padding='same')
+        self.deconv8 = Conv2DTranspose(16, 3, activation='relu', padding='same')
+        self.deconv9 = Conv2DTranspose(16, 3, activation='relu', padding='same')
+        self.deconv10 = Conv2DTranspose(16, 3, activation='relu', padding='same')
+        self.deconv11 = Conv2DTranspose(8, 3, activation='relu')
+        self.deconv12 = Conv2DTranspose(8, 3, activation='relu', padding='same')
+        self.deconv13 = Conv2DTranspose(8, 3, activation='relu', padding='same')
+        self.deconv14 = Conv2DTranspose(8, 3, activation='relu', padding='same')
+        self.deconv15 = Conv2DTranspose(8, 3, activation='relu', padding='same')
+        self.output_layer = Conv2DTranspose(
+            3, 3, activation='relu', padding='same')
+
+    def call(self, input):
+        c1 = self.conv1(input)
+        c2 = self.conv2(c1)
+        c3 = self.conv3(c2)
+        c4 = self.conv4(c3)
+        c5 = self.conv5(c4)
+        c6 = self.conv6(c5)
+        c7 = self.conv7(c6)
+        c8 = self.conv8(c7)
+        c9 = self.conv9(c8)
+        c10 = self.conv10(c9)
+        c11 = self.conv11(c10)
+        c12 = self.conv12(c11)
+        c13 = self.conv13(c12)
+        c14 = self.conv14(c13)
+        c15 = self.conv15(c14)
+
+        d1 = self.deconv1(c15)
+        d2 = self.deconv2(d1)
+        d3 = self.deconv3(d2 + c11)
+        d4 = self.deconv4(d3)
+        d5 = self.deconv5(d4)
+        d6 = self.deconv6(d5)
+        d7 = self.deconv7(d6)
+        d8 = self.deconv8(d7)
+        d9 = self.deconv9(d8)
+        d10 = self.deconv10(d9)
+        d11 = self.deconv11(d10)
+        d12 = self.deconv12(d11)
+        d13 = self.deconv13(d12)
+        d14 = self.deconv14(d13)
+        d15 = self.deconv15(d14)
+        x = self.output_layer(d15)
+        return x + input
+
 
 class DeblurringResnet_v1(tf.keras.Model):
     def __init__(self):

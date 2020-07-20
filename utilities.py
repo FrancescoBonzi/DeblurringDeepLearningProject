@@ -59,7 +59,8 @@ def get_model(model_name):
         'CNNBase_v2': DeblurringCNNBase_v2(),
         'ResNet_v1': DeblurringResnet_v1(),
         'ResNet_v2': DeblurringResnet_v2(),
-        'SkipConnections': DeblurringSkipConnections()
+        'SkipConnections_v1': DeblurringSkipConnections_v1(),
+        'SkipConnections_v2': DeblurringSkipConnections_v2()
     }
     model = encode[model_name]
     #print(model)
@@ -88,7 +89,8 @@ def get_num_conv(model_name):
         'CNNBase_v2': 3,
         'ResNet_v1': 3,
         'ResNet_v2': 3,
-        'SkipConnections': 4
+        'SkipConnections_v1': 4,
+        'SkipConnections_v2': 15
     }
     return encode[model_name]
 

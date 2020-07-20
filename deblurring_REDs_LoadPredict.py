@@ -21,7 +21,7 @@ filename = "./REDs/reports/" + model_name + "/" + "epochs" + str(EPOCHS) + "_" +
 filehandler = open(filename, 'rb') 
 report = dill.load(filehandler)
 
-#inspect_report(report, metrics)
+inspect_report(report, metrics)
 
 ################################
 ### PREDICT AND SHOW RESULTS ###
