@@ -4,8 +4,13 @@ from REDs_directories import *
 
 tf.keras.backend.set_floatx('float64')
 
+<<<<<<< HEAD
 demo = True
 model_name = 'CNNBase_v1'
+=======
+demo = False
+model_name = 'ResNet_v1'
+>>>>>>> efb68c0cf1d1a7589849886a20bf77d3e8b819c1
 loss_name = 'SSIMLoss' # one of: mse, mae, SSIMLoss, PSNR
 EPOCHS = 30
 
