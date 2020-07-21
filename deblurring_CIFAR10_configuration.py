@@ -2,10 +2,10 @@ import tensorflow as tf
 from utilities import get_metrics, get_other_metrics, get_model, get_loss, SSIMLoss, PSNR
 tf.keras.backend.set_floatx('float64')
 
-demo = True
-model_name = 'SkipConnections'
+demo = False
+model_name = 'CNNBase_v1'
 loss_name = 'SSIMLoss' # mse, mae, SSIMLoss, PSNR
-EPOCHS = 5
+EPOCHS = 50
 other_EPOCHS = 15
 
 test_lower_bound = 10 #parameters to limit the test prediction on a subset of the dataset
