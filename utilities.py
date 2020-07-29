@@ -158,20 +158,20 @@ def get_overlap(k, num_patches, num_conv):
     return left_overlap_factor
 
 
-def load_REDs(directory, num_videos, frames_per_video, original_height, original_width):
+def load_REDs(directory, num_videos, frames_per_video, original_height, original_width, video_shift=0, frame_shift=0):
     loaded_dataset = np.zeros(
         (num_videos*frames_per_video, original_height, original_width, 3))
     videos = sorted(os.listdir(directory))
-    for i in range(num_videos):
+    for i in range(video_shift, num_videos + video_shift):
         path = directory + "/" + videos[i]
         if os.path.isdir(path):
             frames = sorted(os.listdir(path))
             print("loading ", path, "...")
-            for j in range(frames_per_video):
+            for j in range(frame_shift, frames_per_video + frame_shift):
                 path_frame = path + "/" + frames[j]
                 if os.path.isfile(path_frame) and path_frame.endswith(".png"):
                     img = cv2.imread(path_frame)
-                    loaded_dataset[i*frames_per_video+j, :, :, :] = img/255
+                    loaded_dataset[(i-video_shift)*frames_per_video+(j-frame_shift), :, :, :] = img/255
     return loaded_dataset
 
 def split_REDs(loaded_dataset, num_videos, frames_per_video, num_patches_width, num_patches_height, height, width, num_conv):
