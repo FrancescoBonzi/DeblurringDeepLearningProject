@@ -4,3 +4,4 @@ models: ResNet_v1      , 35 epochs, loss: mse      --> TIME:  31256.8s  EARLY ST
 models: CNNBase_v1     , 31 epochs, loss: SSIMLoss --> TIME:  55049.1s  EARLY STOP
 models: SkipConnections_v2, 30 epochs, loss: SSIMLoss --> TIME:  45540.5s EARLY STOP
 models: SkipConnections_v2, 50 epochs, loss: mse      --> TIME:  37057.1s
+models: ResNet_v2      , 50 epochs, loss: mse      --> TIME:  11891.6s
