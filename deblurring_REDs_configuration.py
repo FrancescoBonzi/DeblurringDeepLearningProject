@@ -5,18 +5,12 @@ from REDs_directories import *
 tf.keras.backend.set_floatx('float64')
 
 demo = True
-<<<<<<< HEAD
-model_name = 'SkipConnections_v2'
-loss_name = 'SSIMLoss' # one of: mse, mae, SSIMLoss, PSNR
-EPOCHS = 1
-=======
 model_name = 'SkipConnections_v1'
 loss_name = 'SSIMLoss' # one of: mse, mae, SSIMLoss, PSNR
 EPOCHS = 30
 other_EPOCHS = 1
 video_shift = 1
 frame_shift = 0
->>>>>>> 11980b1439bf56e92020441f085aa60b37bdc335
 
 metrics = get_metrics(loss_name)
 other_metrics = get_other_metrics(metrics)
