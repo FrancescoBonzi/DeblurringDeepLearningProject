@@ -6,3 +6,4 @@ models: SkipConnections_v2, 30 epochs, loss: SSIMLoss --> TIME:  45540.5s EARLY 
 models: SkipConnections_v2, 50 epochs, loss: mse      --> TIME:  37057.1s
 models: ResNet_v2      , 50 epochs, loss: mse      --> TIME:  11891.6s
 models: CNNBase_v2     , 50 epochs, loss: mse      --> TIME:  11265.4s
+models: CNNBase_v2     , 50 epochs, loss: mse      --> TIME:  39649.8s
