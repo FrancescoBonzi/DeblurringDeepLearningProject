@@ -165,7 +165,7 @@ def show_image_with_label(img, label):
 ### MAIN ###
 ############
 
-train_frames, train_labels = build_dataset_for_motion_blur("./datasetREDs/train_sharp", num_patches=5)
+train_frames, train_labels = build_dataset_for_motion_blur("./datasetREDs/train_sharp", num_patches=30)
 print(train_frames.shape)
 print(train_labels.shape)
 #show_image_with_label(train_frames[1], train_labels[1])
@@ -176,8 +176,7 @@ model = KernelMotionEstimator()
 model.build(input_shape=(batch_size, patches_size, patches_size, 3))
 model.summary()
 model.compile(optimizer='adam',
-              loss=tf.keras.losses.SparseCategoricalCrossentropy(),
-              metrics=['mse'])
+              loss=tf.keras.losses.SparseCategoricalCrossentropy())
 
 history = model.fit(train_frames, train_labels, batch_size=batch_size, epochs=50, validation_split=0.25)
 
