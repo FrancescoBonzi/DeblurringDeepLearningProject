@@ -5,11 +5,11 @@ from REDs_directories import *
 tf.keras.backend.set_floatx('float64')
 
 demo = False
-model_name = 'SkipConnections_v1'
+model_name = 'ResNet_v1'
 loss_name = 'SSIMLoss' # one of: mse, mae, SSIMLoss, PSNR
 EPOCHS = 30
-other_EPOCHS = 30
-video_shift = 81
+other_EPOCHS = 1
+video_shift = 1
 frame_shift = 0
 
 metrics = get_metrics(loss_name)
@@ -23,7 +23,7 @@ loss = get_loss(loss_name)
 ### RESIZING ORIGINAL IMAGES SHAPE  ###
 #######################################
     
-num_patches_width = 4
+num_patches_width = 3
 num_patches_height = 2
 original_width = 320
 original_height = 180

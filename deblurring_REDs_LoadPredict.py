@@ -28,13 +28,13 @@ inspect_report(report, metrics)
 ################################
 
 predictions = loaded_model.predict(test_blurred_dataset)
-print_dataset(test_blurred_dataset, predictions)
-#print(loaded_model.evaluate(x=predictions, y=test_sharped_dataset, batch_size=32))
-#print(loaded_model.metrics_names)
+#print_dataset(test_blurred_dataset, predictions)
+print(loaded_model.evaluate(x=predictions, y=test_sharped_dataset, batch_size=32))
+print(loaded_model.metrics_names)
 
 ################################
 ### RESTORE AND SHOW RESULTS ###
 ################################
 
 restored_images = rebuild_images(predictions, num_patches_height, num_patches_width, original_height, original_width, height, width, num_conv)
-print_dataset(test_sharped_REDs, test_blurred_REDs, predicted_images=restored_images)
+print_dataset(test_blurred_REDs[2:], restored_images[2:], num=1)
