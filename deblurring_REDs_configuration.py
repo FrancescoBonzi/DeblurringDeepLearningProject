@@ -7,7 +7,7 @@ tf.keras.backend.set_floatx('float64')
 demo = False
 model_name = 'SkipConnections_v1'
 loss_name = 'SSIMLoss' # one of: mse, mae, SSIMLoss, PSNR
-EPOCHS = 30
+EPOCHS = 60
 other_EPOCHS = 30
 video_shift = 81
 frame_shift = 0

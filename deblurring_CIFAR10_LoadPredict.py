@@ -26,6 +26,7 @@ filename = "./CIFAR10/reports/" + model_name + "/" + "epochs" + str(EPOCHS) + "_
 filehandler = open(filename, 'rb') 
 report = dill.load(filehandler)
 
+print(metrics)
 inspect_report(report, metrics)
 
 ################################################
