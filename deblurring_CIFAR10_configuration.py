@@ -3,7 +3,11 @@ from utilities import get_metrics, get_other_metrics, get_model, get_loss, SSIML
 tf.keras.backend.set_floatx('float64')
 
 demo = False
+<<<<<<< HEAD
 model_name = 'ResNet_v2'
+=======
+model_name = 'CNNBase_v2'
+>>>>>>> 0b0caf021015ec64b6a96df3bb97094292616731
 loss_name = 'mse' # mse, mae, SSIMLoss, PSNR
 EPOCHS = 50
 other_EPOCHS = 0
