@@ -24,9 +24,6 @@ height = int(original_height/num_patches_height)
 motion_kernel_size = 20
 patches_size = motion_kernel_size
 
-test_num_videos = len(os.listdir(test_sharped_videos_directory))
-test_frames_per_video = len(os.listdir(test_sharped_videos_directory + "/" + os.listdir(test_sharped_videos_directory)[1]))
-
 class KernelMotionEstimator(tf.keras.Model):
     def __init__(self):
         super(KernelMotionEstimator, self).__init__()
@@ -69,9 +66,7 @@ def motion_kernel_generator(angle, length):
 
 # It builds the REDs dataset of motion blurred patches
 # We suppose .DS_Store is not in the directories
-def build_dataset_for_motion_blur(directory, num_patches=20, dim_patches= patches_size):
-    num_videos = len(os.listdir(directory))
-    num_frames = len(os.listdir(directory + "/" + os.listdir(directory)[1]))
+def build_dataset_for_motion_blur(directory, num_videos, num_frames, num_patches=20, dim_patches=patches_size):
     dataset = []
     labels = []
     for i in range(num_videos):
@@ -166,7 +161,7 @@ def show_image_with_label(img, label):
 ### MAIN ###
 ############
 
-train_frames, train_labels = build_dataset_for_motion_blur(train_sharped_videos_directory, num_patches=5)
+train_frames, train_labels = build_dataset_for_motion_blur(train_sharped_videos_directory, train_num_videos, train_frames_per_video, num_patches=5)
 print(train_frames.shape)
 print(train_labels.shape)
 #show_image_with_label(train_frames[1], train_labels[1])
@@ -192,7 +187,7 @@ model.save("./REDs/models/KernelMotion/" + "epochs" + str(EPOCHS))
 
 ### TEST ###
 
-test_frames, test_labels = build_dataset_for_motion_blur(test_sharped_videos_directory, num_patches=5)
+test_frames, test_labels = build_dataset_for_motion_blur(test_sharped_videos_directory, train_num_videos, train_frames_per_video, num_patches=5)
 predictions = model.predict(test_frames)
 predicted_labels = []
 for i in range(len(predictions)):
