@@ -6,7 +6,7 @@ demo = False
 model_name = 'SkipConnections_v2'
 loss_name = 'SSIMLoss' # mse, mae, SSIMLoss, PSNR
 EPOCHS = 50
-other_EPOCHS = 15
+other_EPOCHS = 0
 
 test_lower_bound = 10 #parameters to limit the test prediction on a subset of the dataset
 test_upper_bound = 20
