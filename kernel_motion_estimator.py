@@ -10,8 +10,10 @@ import numpy as np
 import os
 import random
 import cv2
+import dill
 from math import cos, sin, pi
-from utilities import print_dataset, rebuild_images, load_REDs, get_frames_per_video, get_num_videos, split_REDs
+from utilities import print_dataset, rebuild_images, load_REDs, get_frames_per_video, get_num_videos, split_REDs, extract_from_report
+from REDs_directories import *
 
 num_patches_width = 16 
 num_patches_height = 9 
@@ -22,9 +24,8 @@ height = int(original_height/num_patches_height)
 motion_kernel_size = 20
 patches_size = motion_kernel_size
 
-test_directory = "./datasetREDs/test_blur"
-test_num_videos = len(os.listdir(test_directory))
-test_frames_per_video = len(os.listdir(test_directory + "/" + os.listdir(test_directory)[1]))
+test_num_videos = len(os.listdir(test_sharped_videos_directory))
+test_frames_per_video = len(os.listdir(test_sharped_videos_directory + "/" + os.listdir(test_sharped_videos_directory)[1]))
 
 class KernelMotionEstimator(tf.keras.Model):
     def __init__(self):
@@ -165,12 +166,13 @@ def show_image_with_label(img, label):
 ### MAIN ###
 ############
 
-train_frames, train_labels = build_dataset_for_motion_blur("./datasetREDs/train_sharp", num_patches=30)
+train_frames, train_labels = build_dataset_for_motion_blur(train_sharped_videos_directory, num_patches=5)
 print(train_frames.shape)
 print(train_labels.shape)
 #show_image_with_label(train_frames[1], train_labels[1])
 
 batch_size = 32
+EPOCHS = 15
 
 model = KernelMotionEstimator()
 model.build(input_shape=(batch_size, patches_size, patches_size, 3))
@@ -178,11 +180,19 @@ model.summary()
 model.compile(optimizer='adam',
               loss=tf.keras.losses.SparseCategoricalCrossentropy())
 
-history = model.fit(train_frames, train_labels, batch_size=batch_size, epochs=50, validation_split=0.25)
+report = model.fit(train_frames, train_labels, batch_size=batch_size, epochs=EPOCHS, validation_split=0.2)
+
+### SAVE MODEL AND REPORT ###
+
+filename = "./REDs/reports/KernelMotion/" + "epochs" + str(EPOCHS) + ".obj"
+filehandler = open(filename, 'wb')
+list = extract_from_report(report, [])
+dill.dump(list, filehandler)
+model.save("./REDs/models/KernelMotion/" + "epochs" + str(EPOCHS))
 
 ### TEST ###
 
-test_frames, test_labels = build_dataset_for_motion_blur("./datasetREDs/test_sharp", num_patches=5)
+test_frames, test_labels = build_dataset_for_motion_blur(test_sharped_videos_directory, num_patches=5)
 predictions = model.predict(test_frames)
 predicted_labels = []
 for i in range(len(predictions)):
