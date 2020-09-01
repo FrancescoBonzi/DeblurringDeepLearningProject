@@ -4,3 +4,4 @@ models: ResNet_v1      ,  1 epochs, loss: SSIMLoss --> TIME:     44.8s
 models: ResNet_v1      , 30 epochs, loss: SSIMLoss --> TIME: 138703.3s
 models: SkipConnections_v1, 30 epochs, loss: SSIMLoss --> TIME:  36996.5s
 models: SkipConnections_v1, 60 epochs, loss: SSIMLoss --> TIME:  44434.5s
+models: SkipConnections_v1, 50 epochs, loss: SSIMLoss --> TIME:  44338.0s
