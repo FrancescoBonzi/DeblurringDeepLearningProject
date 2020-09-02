@@ -4,7 +4,7 @@ tf.keras.backend.set_floatx('float64')
 
 demo = False
 model_name = 'SkipConnections_v2'
-loss_name = 'SSIMLoss' # mse, mae, SSIMLoss, PSNR
+loss_name = 'mse' # mse, mae, SSIMLoss, PSNR
 EPOCHS = 50
 other_EPOCHS = 0
 
