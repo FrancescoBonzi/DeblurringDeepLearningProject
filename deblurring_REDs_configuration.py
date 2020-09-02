@@ -7,15 +7,10 @@ tf.keras.backend.set_floatx('float64')
 demo = False
 model_name = 'ResNet_v1'
 loss_name = 'SSIMLoss' # one of: mse, mae, SSIMLoss, PSNR
-<<<<<<< HEAD
-EPOCHS = 60
+
+EPOCHS = 30
 other_EPOCHS = 30
 video_shift = 81
-=======
-EPOCHS = 30
-other_EPOCHS = 1
-video_shift = 1
->>>>>>> 0b0caf021015ec64b6a96df3bb97094292616731
 frame_shift = 0
 
 metrics = get_metrics(loss_name)
