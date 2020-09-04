@@ -228,10 +228,10 @@ def inspect_report(report, metrics):
         plt.xlabel(xlabel)
         plt.legend()
         plt.show()
-    '''print('TRAINING EPOCHS = ', len(report[0])) 
+    print('TRAINING EPOCHS = ', len(report[0])) 
     print('Accuracy = ', mean(report[0]), mean(report[1]))
     print(metrics[1], ' index = ', mean(report[2]), mean(report[3]))
     print(metrics[2], ' index = ', mean(report[4]), mean(report[5]))
-    print(metrics[3], ' index = ', mean(report[6]), mean(report[7]))'''
+    print(metrics[3], ' index = ', mean(report[6]), mean(report[7]))
 
 
