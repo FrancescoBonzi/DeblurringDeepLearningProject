@@ -5,9 +5,10 @@ import numpy as np
 import PIL.Image
 import IPython.display as display
 import matplotlib.pyplot as plt
+import cv2
 
 MAX_DIM = 256
-NUM_STYLE_IMAGES = 50 
+NUM_STYLE_IMAGES = 6000 
 
 # Choose intermediate layers from the network to represent the style and content of the image:
 content_layers = ['block5_conv2']
@@ -63,6 +64,7 @@ def tensor_to_image(tensor):
     if np.ndim(tensor) > 3:
         assert tensor.shape[0] == 1
         tensor = tensor[0]
+    print(tensor.shape)
     return PIL.Image.fromarray(tensor)
 
 # Define a function to load an image and limit its maximum dimension to 256 pixels.
@@ -100,13 +102,8 @@ def cifar10_as_style_images():
     style_images = style_images / 255.0
     print(style_images.shape)
 
-    # It takes the first image from cifar and uses it as content
-    original_image = style_images[0]
-    display.clear_output(wait=True)
-    display.display(tensor_to_image(original_image))
-
     blur = 1.0
-    tfimg = tf.reshape(style_images[0], [1, 32, 32, 3])
+    tfimg = tf.reshape(style_images[3], [1, 32, 32, 3])
     orimg = np.array(tfimg)
 
     # Blurring
@@ -125,8 +122,26 @@ def cifar10_as_style_images():
                               NUM_STYLE_IMAGES-1, 1, 32, 32, 3])
 
     style_images = tf.cast(style_images, tf.float32)
-    style_image = style_images[0]
 
+    print(style_images.shape)
+    print(content_image.shape)
+
+    '''
+    # cast to gray images
+    style_images_gray = []
+    style_images_gray = np.mean(style_images, axis=4).reshape(-1, 32, 32)
+    content_image_gray = np.mean(content_image, axis=3).reshape(32, 32)
+
+    print(style_images_gray.shape)
+    print(content_image_gray.shape)
+    
+    style_image_gray = style_images[0]
+
+    plt.figure(figsize=(12, 12))
+    plt.imshow(style_images_gray[0], cmap='gray')
+    plt.show()
+    '''
+    style_image = style_images[0]
     return content_image, style_image, style_images
 
 def vgg_layers(layer_names):
@@ -201,17 +216,6 @@ def train_step(image):
     
 content_image, style_image, style_images = cifar10_as_style_images()
 
-'''plt.subplot(1, 2, 1)
-imshow(content_image, 'Content Image')
-plt.show()
-display.clear_output(wait=True)
-display.display(tensor_to_image(content_image))'''
-
-'''plt.subplot(1, 2, 2)
-imshow(style_image, 'Style Image')
-display.clear_output(wait=True)
-display.display(tensor_to_image(style_image))'''
-
 # Now load a VGG19 without the classification head, and list the layer names
 vgg = tf.keras.applications.VGG19(include_top=False, weights='imagenet')
 
@@ -230,17 +234,13 @@ opt = tf.keras.optimizers.Adam(learning_rate=0.02, beta_1=0.99, epsilon=1e-1)
 
 # Also, this high frequency component is basically an edge-detector. You can get similar output from the Sobel edge detector, for example:
 sobel = tf.image.sobel_edges(content_image)
-plt.subplot(1, 2, 1)
-#imshow(clip_0_1(sobel[..., 0]/4+0.5), "Horizontal Sobel-edges")
-plt.subplot(1, 2, 2)
-#imshow(clip_0_1(sobel[..., 1]/4+0.5), "Vertical Sobel-edges")
 
 # Choose a weight for the total_variation_loss:
 total_variation_weight = 30
 
 # Define a tf.Variable to contain the image to optimize. To make this quick, initialize it with the content image (the tf.Variable must be the same shape as the content image):
 image = tf.Variable(content_image)
-#tensor_to_image(image).save('./image' + str(0) + '.png')
+tensor_to_image(image).save('./CIFAR10/style_transfer_results/horse' + str(0) + '.png')
 
 # And run the optimization:
 start = time.time()
@@ -248,13 +248,14 @@ start = time.time()
 epochs = 15
 steps_per_epoch = 1  # 100
 
+print('Start training')
 step = 0
 for n in range(epochs):
     for m in range(steps_per_epoch):
         step += 1
         train_step(image)
         print(".", end='')
-    tensor_to_image(image).save('./image' + str(int(step/steps_per_epoch)) + '.png')
+    tensor_to_image(image).save('./CIFAR10/style_transfer_results/horse' + str(int(step/steps_per_epoch)) + '.png')
     print("Train step: {}".format(step))
 
 end = time.time()
