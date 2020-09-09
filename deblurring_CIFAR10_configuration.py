@@ -3,9 +3,9 @@ from utilities import get_metrics, get_other_metrics, get_model, get_loss, SSIML
 tf.keras.backend.set_floatx('float64')
 
 demo = False
-model_name = 'CNNBase_v2'
-loss_name = 'mse' # mse, mae, SSIMLoss, PSNR
-EPOCHS = 60
+model_name = 'CNNBase_v3'
+loss_name = 'SSIMLoss' # mse, mae, SSIMLoss, PSNR
+EPOCHS = 30
 other_EPOCHS = 0
 
 test_lower_bound = 10 #parameters to limit the test prediction on a subset of the dataset

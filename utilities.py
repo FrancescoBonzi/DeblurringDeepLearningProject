@@ -58,6 +58,7 @@ def get_model(model_name):
     encode = {
         'CNNBase_v1': DeblurringCNNBase_v1(),
         'CNNBase_v2': DeblurringCNNBase_v2(),
+        'CNNBase_v3': DeblurringCNNBase_v3(),
         'ResNet_v1': DeblurringResnet_v1(),
         'ResNet_v2': DeblurringResnet_v2(),
         'SkipConnections_v1': DeblurringSkipConnections_v1(),
@@ -88,6 +89,7 @@ def get_num_conv(model_name):
     encode = {
         'CNNBase_v1': 3,
         'CNNBase_v2': 3,
+        'CNNBase_v3': 3,
         'ResNet_v1': 3,
         'ResNet_v2': 3,
         'SkipConnections_v1': 4,
