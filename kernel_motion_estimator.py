@@ -12,7 +12,7 @@ import random
 import cv2
 import dill
 from math import cos, sin, pi
-from utilities import print_dataset, rebuild_images, load_REDs, get_frames_per_video, get_num_videos, split_REDs, extract_from_report
+from utilities import print_dataset, rebuild_images, load_REDs, get_frames_per_video, get_num_videos, split_REDs, extract_from_report, inspect_report
 from REDs_directories import *
 
 num_patches_width = 16 
@@ -23,6 +23,11 @@ width = int(original_width/num_patches_width)       #patches dimensions without 
 height = int(original_height/num_patches_height)
 motion_kernel_size = 20
 patches_size = motion_kernel_size
+
+test_num_videos = 30
+test_frames_per_video = 50
+train_num_videos = 100
+train_frames_per_video = 3
 
 class KernelMotionEstimator(tf.keras.Model):
     def __init__(self):
@@ -181,8 +186,9 @@ report = model.fit(train_frames, train_labels, batch_size=batch_size, epochs=EPO
 
 filename = "./REDs/reports/KernelMotion/" + "epochs" + str(EPOCHS) + ".obj"
 filehandler = open(filename, 'wb')
-list = extract_from_report(report, [])
+list = extract_from_report(report, ['loss'])
 dill.dump(list, filehandler)
+inspect_report(list, ['loss'])
 model.save("./REDs/models/KernelMotion/" + "epochs" + str(EPOCHS))
 
 ### TEST ###
@@ -192,12 +198,9 @@ predictions = model.predict(test_frames)
 predicted_labels = []
 for i in range(len(predictions)):
     predicted_labels.append(np.argmax(predictions[i]))
-print(test_labels - predicted_labels)
 
-'''test_blurred_REDs = load_REDs("./datasetREDs/test_blur", test_num_videos, test_frames_per_video, original_height, original_width)
-#show_image_with_label(test_blurred_REDs[1], 1)
-predicted_motion_kernels, predicted_motion_vectors = motion_field_predictor(model, test_blurred_REDs)
-motion_fields = rebuild_images(predicted_motion_kernels, num_patches_height, num_patches_width, original_width, original_height, height, width, 0)
-print_dataset(test_blurred_REDs, motion_fields)'''
+# We expect a list of zeros, so it means that for an image the test_label is the same of the predicted one
+results = test_labels - predicted_labels
+print(results)
 
 

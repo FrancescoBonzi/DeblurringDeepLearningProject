@@ -126,21 +126,6 @@ def cifar10_as_style_images():
     print(style_images.shape)
     print(content_image.shape)
 
-    '''
-    # cast to gray images
-    style_images_gray = []
-    style_images_gray = np.mean(style_images, axis=4).reshape(-1, 32, 32)
-    content_image_gray = np.mean(content_image, axis=3).reshape(32, 32)
-
-    print(style_images_gray.shape)
-    print(content_image_gray.shape)
-    
-    style_image_gray = style_images[0]
-
-    plt.figure(figsize=(12, 12))
-    plt.imshow(style_images_gray[0], cmap='gray')
-    plt.show()
-    '''
     style_image = style_images[0]
     return content_image, style_image, style_images
 
