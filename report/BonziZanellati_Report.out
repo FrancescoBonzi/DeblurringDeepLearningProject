@@ -1,0 +1,15 @@
+\BOOKMARK [1][-]{section*.2}{Introduction}{}% 1
+\BOOKMARK [1][-]{section.0.1}{Architectures of the Neural Networks}{}% 2
+\BOOKMARK [2][-]{subsection.0.1.1}{Plain Network}{section.0.1}% 3
+\BOOKMARK [2][-]{subsection.0.1.2}{Skip Connections}{section.0.1}% 4
+\BOOKMARK [2][-]{subsection.0.1.3}{Residual Network}{section.0.1}% 5
+\BOOKMARK [1][-]{section.0.2}{Loss Functions}{}% 6
+\BOOKMARK [2][-]{subsection.0.2.1}{Perceptually motivated metrics}{section.0.2}% 7
+\BOOKMARK [2][-]{subsection.0.2.2}{Other Metrics and their use}{section.0.2}% 8
+\BOOKMARK [1][-]{section.0.3}{First Experiment: CIFAR10}{}% 9
+\BOOKMARK [1][-]{section.0.4}{Second Experiment: REDs}{}% 10
+\BOOKMARK [1][-]{section.0.5}{Other Deblurring Strategies}{}% 11
+\BOOKMARK [2][-]{subsection.0.5.1}{Kernel Motion Estimation}{section.0.5}% 12
+\BOOKMARK [2][-]{subsection.0.5.2}{Kernel Motion Estimation via Deep Learning}{section.0.5}% 13
+\BOOKMARK [2][-]{subsection.0.5.3}{Style Transfer}{section.0.5}% 14
+\BOOKMARK [1][-]{section*.19}{Conclusion}{}% 15
