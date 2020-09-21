@@ -5,7 +5,7 @@ from REDs_directories import *
 tf.keras.backend.set_floatx('float64')
 
 demo = False
-model_name = 'ResNet_v1'
+model_name = 'CNNBase_v1'
 loss_name = 'SSIMLoss' # one of: mse, mae, SSIMLoss, PSNR
 
 EPOCHS = 30
@@ -24,7 +24,7 @@ loss = get_loss(loss_name)
 ### RESIZING ORIGINAL IMAGES SHAPE  ###
 #######################################
     
-num_patches_width = 3
+num_patches_width = 4
 num_patches_height = 2
 original_width = 320
 original_height = 180
@@ -43,5 +43,10 @@ height = int(original_height/num_patches_height)
 test_num_videos = get_num_videos(test_blurred_videos_directory, test_sharped_videos_directory)
 test_frames_per_video = get_frames_per_video(test_blurred_videos_directory)
 
+test_num_videos = 30
+test_frames_per_video = 50
+train_num_videos = 100
+train_frames_per_video = 3
 
-
+num_videos = 80
+frames_per_video = 10
