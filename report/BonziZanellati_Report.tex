@@ -1,4 +1,4 @@
-\documentclass[12pt,a4paper]{report}
+\documentclass[12pt,a4paper]{article}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage[english]{babel}
@@ -19,8 +19,7 @@
 \tableofcontents
 \newpage
 
-\section*{Introduction}
-\addcontentsline{toc}{section}{Introduction}
+\section{Introduction}
 Blurring is the process of altering a region of a signal generally due to  a weighted sums of neighboring regions of the same signal. In the case of image blurring, a pixel’s value is affected by the adjacent pixels. There are several causes for blurring artefacts such as\cite {P&V&G}: 
 \begin{itemize}
 \item \textit{motion blur} due to movement of the object or imaging system;
@@ -43,7 +42,7 @@ The project focuses on comparing the different autoencoders according to three m
 
 The experiment with CIFAR10 was conducted considering all the three criteria mentioned above. For REDs, given the high computational cost, we limited our investigation to a comparison on the three different structures of autoencoders.
 
-In the next section we describe the architectures of the designed autoencoders. Section 2 is dedicated to the introduction of some loss functions and accuracy metrics and how they have been used to train and assess our models. Section 3 and 4 present the results obtained on the two Datasets mentioned above. In particular section 4 is dedicated to REDs and we will also discuss the implemented strategy to locally deblur images. In the $5^{th}$ section we discuss other strategies that we have hypothesized to address the deblurring problem: the first is a multi-classifier network for \textit{motion field estimation}; the second is inspired by a research article\cite{G&E&B} on \textit{style transfer}. Finally, last section is the conclusion of this report in which we sum up the main results of the project.
+In the next section we describe the architectures of the designed autoencoders. Section 3 is dedicated to the introduction of some loss functions and accuracy metrics and how they have been used to train and assess our models. Section 4 and 5 present the results obtained on the two Datasets mentioned above. In particular section 5 is dedicated to REDs and we will also discuss the implemented strategy to locally deblur images. In the $6^{th}$ section we discuss other strategies that we have hypothesized to address the deblurring problem: the first is a multi-classifier network for \textit{motion field estimation}; the second is inspired by a research article\cite{G&E&B} on \textit{style transfer}. Finally, last section is the conclusion of this report in which we sum up the main results of the project.
  
 \section{Architectures of the Neural Networks}
 An autoencoder is an artificial neural network that learns to copy its input to its output. It is constituted by two main parts: an encoder that compress the input into a lower-dimensional code, and a decoder that maps the code to a reconstruction of the original input. The code is a compact “summary” or “compression” of the input, also called the latent-space representation. In our autoencoder architectures the main goal is not to generate an exact copy of the original input, but rather to achieve a good representation by changing the reconstruction criterion. Indeed, the networks take a partially corrupted input and are trained to recover the original undistorted input. In practice, the objective of deblurring autoencoders is that of cleaning the corrupted input, or deblurring. In order to address the encoding problem Convolutional Neural Network layers (CNN) are employed, while the decoding phase is faced with deconvolution layers. CNN layers with different filters have the power to extract patterns and the main features from the input images which are saved in the latent space representation. Three different architectures have been developed based on autoencoder structure and for each of them we designed different version. In figure \ref{table_params} there is a comparison between the number of total parameters to train in each network.
@@ -386,8 +385,7 @@ Unfortunately, the results are not so good. As we can see from the results in fi
 
 Also the PSNR and SSIM metrics confirm the poor quality of the results as shown in the table in  figure \ref{style}. However, it is interesting for us to report an attempt that has not yet been investigated in the literature.
 
-\section*{Conclusion}
-\addcontentsline{toc}{section}{Conclusion}
+\section{Conclusion}
 In the project we have widely explore different autoencoder strategies and we have also tried to investigate two different approaches. The autoencoder in its plain version seems to produce the best results on both dataset and we did not really appreciate the advantages of Skip Connections and ResNet mentioned in the literature such as, respectively, the faster decrease of the loss function and the reconstruction of the shapes of the objects in the images. However the Skip Connection networks recover the original colors better than the similar CNN Base networks and this is particularly visible in some images of the CIFAR10 sample.
 
 As regard a comparison of different structure of the same architecture, we can state that the shallower networks have better results. Moreover, the use of an higher number of filters seems to have a positive effect on the accuracy in color recovery.
